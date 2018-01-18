@@ -1,0 +1,52 @@
+<ion-view class="login-view auth-view" cache-view="false">
+  <ion-content has-bouncing="false" scroll="false">
+
+    <div class="row">
+      <div class="col col-center">
+        <center>
+          <img width="70%" style="max-width: 320px; margin: 30px 0px; " ng-src="./img/common/white_logo.png"/>
+        </center>
+      </div>
+    </div>
+
+    <div class="row form-row" style="padding-top: 50px">
+      <div class="col">
+        <form name="login_form" class="form-container" novalidate>
+          <div class="input-list list list-inset">
+
+          <div ng-if="!otpFlag">
+            <label  class="item item-input">
+              <input type="tel" placeholder="Mobile Number" name="mobile" ng-model="user.mobile" required maxlength="10">
+            </label>
+
+          </div>
+          <div ng-if="otpFlag">
+            <div class="myOTP">
+              {{user.mobile}} <span class="myWhite icon ion-edit" ng-click="resetNumber()" style="float: right"></span>
+            </div>
+            <label ng-if="otpFlag" class="item item-input">
+              <input type="tel" placeholder="Enter OTP" name="otp" ng-model="user.otp" required>
+            </label>
+          </div>
+
+          </div>
+          <p ng-show="error" class="message error">{{error}}</p>
+          <button type="submit" ng-if="!otpFlag" class="button button-block auth-action-button" ng-click="validateNumber()" ng-disabled="login_form.$invalid">
+            Proceed
+          </button>
+          <button type="submit" ng-if="otpFlag" class="button button-block auth-action-button" ng-click="doLogIn()" ng-disabled="login_form.$invalid">
+            Log In
+          </button>
+        </form>
+        <div class="alternative-actions">
+          <a class="action-link button button-small button-clear" ui-sref="intro.auth-signup()">Sign Up</a>
+          <a class="action-link button button-small button-clear" ui-sref="main.app.feed.arabian()">Skip</a>
+        </div>
+        <center>
+          <p id="resendOTP" ng-if="resendOTPFlag" style="text-align: center"></p>
+          <button ng-if="showResendButton" ng-click="validateNumber()" style="color: #e67e22;" class="button button-clear button-small">Resend OTP</button>
+        </center>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,137 @@
+<ion-view class="shopping-cart-view" cache-view="false">
+  <ion-header-bar class="shopping-cart-header">
+
+    <button class="button button-clear" style="width: 35px" ui-sref="main.app.deals()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
+    <h1 class="title" style="padding-left: 10px">Purchase Passes</h1>
+    <!-- " -->
+  </ion-header-bar>
+  <ion-content class="shopping-cart-content" has-bouncing="false">
+    <div class="row row-center empty-cart-row" ng-if="products.length == 0">
+      <div class="col">
+        <h3 class="no-products-title" style="margin-top: 30px; color: #c52031">No offers added to the cart.</h3>
+      </div>
+    </div>
+    <div ng-if="products.length > 0">
+
+<div class="products-in-cart-row">
+
+    <div class="shopping-cart-view">
+    <ul class="list checkout-products">
+      <li class="item checkout-product" ng-repeat="product in products track by $index" ng-style="getItemStyle(product)">
+        
+		    <div class="row" style="margin-bottom: 10px" ng-if="product.isImageAvailable == 1">			
+              <div class="col col-center">
+			  <pre-img ratio="_5_3">
+                 <img ng-src="{{product.url}}" class="myDealsImg" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" spinner-on-load>
+				 <!--<img class="product-image" ng-src="{{ product.image }}" > -->
+              </pre-img>
+			  			  
+			  </div>
+            </div>		
+
+		
+		<div class="row">
+	
+          <div class="col col-75 col-center">			
+            <div class="row">			
+              <div class="col col-10 col-center noColorButton">
+                <!-- <span ng-click="removeFromCart(product)" class="icon ion-ios-close-outline myDelete"></span> -->
+                  <a ng-click="removeFromCart(product)" class="button button-small noColorButton" style="border-top-right-radius: 0; border-bottom-right-radius: 0; color: #ecebeb; border:none"><i class="icon ion-ios-close-outline"></i></a>
+              </div>
+              <div class="col col-90 col-center">
+                <span class="product-name item-text-wrap" style="color: #ffc900; font-weight: 400;">{{product.itemName}}</span>
+              </div>
+            </div>
+            <div class="row" ng-if="product.isCombo">
+              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-90 col-center">
+                <p style="font-size: 10px; color: #707778; padding-top: 3px"><tag style="color: #8C8C8C;">{{product.combo}}</tag></p>
+              </div>
+            </div>
+            <div class="row" ng-if="product.isCustom">
+              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-90 col-center">
+                <p style="font-size: 10px; color: #ecebeb; padding-top: 3px">Choice: <tag style="color: #FFF;">{{product.variant}}</tag></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-90 col-center">
+                <p style="font-size: 10px; color: #ecebeb; padding-top: 3px"><i class="fa fa-inr"></i> {{product.itemPrice}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col col-25 col-center">
+            <div class="row">
+                <tag class="noColorButton">
+                  <a ng-click="lessCount(product)" class="button button-small button-outline" style="border-top-right-radius: 0; border-bottom-right-radius: 0; color: #9b9ea0; border:1px solid #4b4f52">-</a>
+                </tag>
+                  <a class="button button-small"  style="color: #FFF; background-color:#4b4f52; border-radius: 0; ">{{product.qty}}</a>
+                <tag class="noColorButton">
+                  <a ng-click="addCount(product)" class="button button-small button-outline" style="border-top-left-radius: 0; border-bottom-left-radius: 0; color: #9b9ea0; border:1px solid #4b4f52">+</a>
+                </tag>
+              <!-- <span ng-click="lessCount(product)" class="icon ion-ios-minus-outline myMinus"></span>
+              <span class="product-name">{{product.qty}}</span>
+              <span ng-click="addCount(product)" class="icon ion-ios-plus-outline myPlus"></span> -->
+            </div>
+          </div>
+
+        </div>
+      </li>
+    </ul>
+    </div>
+
+
+
+      <ul class="list shopping-bill">
+        <li class="item">
+          <div class="row">
+            <div class="col">
+              <span class="bill-item-title">Price Subtotal</span>
+            </div>
+            <div class="col">
+              <span class="bill-item-value"><i class="fa fa-inr"></i> {{ getSubtotal() | number:2 }}</span>
+            </div>
+          </div>
+        </li>
+        <li class="item">
+          <div class="row">
+            <div class="col">
+              <span class="bill-item-title">Other Charges</span>
+            </div>
+            <div class="col">
+              <span class="bill-item-value"><i class="fa fa-inr"></i> {{ getOther() | number:2 }}</span>
+            </div>
+          </div>
+        </li>
+        <li class="item bill-total">
+          <div class="row">
+            <div class="col">
+              <span class="bill-item-title">Order Total</span>
+            </div>
+            <div class="col">
+              <span class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal() | number:2 }}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+
+
+      </div>
+    </div>
+	
+  </ion-content>
+  
+  <ion-footer-bar ng-if="products.length > 0" class="checkout-footer" ng-click="placeOrder()">
+    <a class="button button-full place-order-button" >
+      Buy Now
+    </a>
+  </ion-footer-bar>
+
+
+  
+</ion-view>

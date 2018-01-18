@@ -1,0 +1,36 @@
+.signup-view
+{
+	background: #e74c3c;
+
+	.facebook-button
+	{
+		margin-top: 6vh;
+	}
+
+	.form-divider
+	{
+		margin: 7vh 0px;
+	}
+
+	.auth-action-button
+	{
+		margin-top: 15vh;
+	}
+
+	.alternative-actions
+	{
+		margin-top: 1vh;
+	}
+
+	.images-row
+	{
+		padding-top: 0px;
+		height: 27%;
+
+		.illustration-container
+		{
+			margin: 0px auto;
+			width: 80vw;
+		}
+	}
+}

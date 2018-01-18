@@ -1,0 +1,65 @@
+<ion-view class="welcome-view" cache-view="false">
+  <ion-content has-bouncing="false" scroll="false">
+    <div class="row" style="margin: 70px 0px">
+      <div class="col">
+        <center>
+          <img src="./img/common/white_logo_full.png" width="60%"/>
+        </center>
+      </div>
+    </div>
+
+    <div class="row actions-row" ng-if="isLocationSet  && !changeLocationFlag">
+      <div class="col">
+        <a ng-if="!isLoggedIn" class="button button-block get-started-button" ui-sref="intro.walkthrough-learn()">EXPLORE</a>
+        <a ng-if="!isLoggedIn" class="button button-block button-clear auth-button" ui-sref="intro.auth-login()">Login</a>
+        <a ng-if="isLoggedIn" class="button button-block get-started-button" style="text-transform: none; font-weight: 200; font-size: 16px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" ui-sref="main.app.feed.arabian">Continue as <tag style="color: #FFC300; text-transform: capitalize; font-weight: 300">{{loggedUser}}</tag></a>
+        <a ng-if="isLoggedIn" class="button button-block button-clear auth-button" ng-click="logout()" style="text-decoration: underline">Logout</a>
+      </div>
+    </div>
+
+    <div class="row" ng-if="!isLocationSet || changeLocationFlag">
+      <!-- OLD LOCATION SELECTION 
+
+      <div class="col">
+      <h3 class="account-sub-title" style="color: #FFF; font-weight: 300; font-size: 14px;">Select your City and Locality</h3>
+
+         City Chooser 
+        <div class="address-chooser" ng-click="openCityPopover($event)">
+          <button class="button button-block icon-right addresses-popover-button-forlocation" style="background: #a71d2b; color: #FFF; " ng-class="{'ion-chevron-up': city_popover.isShown(), 'ion-chevron-down' : !city_popover.isShown()}">
+            {{data.selected_city.name || 'Select City'}}
+          </button>
+        </div>
+
+        Location Chooser
+        <div class="address-chooser" ng-click="openLocalityPopover($event)" ng-if="isCitySet">
+          <button class="button button-block icon-right addresses-popover-button-forlocation" style="background: #a71d2b; color: #FFF; " ng-class="{'ion-chevron-up': locality_popover.isShown(), 'ion-chevron-down' : !locality_popover.isShown()}">
+            {{data.selected_locality.name || 'Your Locality'}}
+          </button>
+        </div>
+
+      </div>
+      -->
+
+      <div class="col" style="padding: 0px 20px">
+      <p style="margin: 0; font-size: 10px; color: #ecbfc4; letter-spacing: 2px; text-align: center;">
+        <tag ng-if="currentLocation && !location.formatted_address">YOUR SAVED LOCATION</tag>
+        <tag ng-if="!currentLocation && !location.formatted_address">SET YOUR LOCATION</tag>
+        <tag ng-if="location.formatted_address">SAVE NEW LOCATION</tag>
+      </p>
+
+      <input type="text" style="background: none; width: 100%; border-radius: 0; border-bottom: 1px solid #ab9fa0; text-align: center; font-size: 16px; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" placeholder="Type in your location here..." location-suggestion location="location" ng-model="location.formatted_address || currentLocation">
+
+        <div class="alternative-actions">
+          <a class="action-link button button-small button-clear" style="float: left;
+    color: #ab9a9c;" ui-sref="main.app.feed.arabian()">Cancel</a>
+          <a class="action-link button button-small button-clear" style="float: right;
+    color: #fefbfb;" ng-if="location.formatted_address" ng-click="setGoogleLocation(myLocation)">Confirm</a>
+        </div>
+      </div>
+
+    </div>
+
+    <img src="img/walkthrough/theme.png" style="position: absolute; bottom: 0; z-index: -1" width="100%" class="hello">
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,14 @@
+<div style="margin-top: 10px"></div>
+<div ng-repeat="city in allList">
+  <div class="row" style="padding: 0px">
+    <div class="col" style="padding: 0px">
+      <h4 class="outletTitle" style="">{{city.city}}</h4>
+    </div>
+  </div>
+  <div class="list">
+    <!-- <div class="itemOutlet" ng-repeat="outlet in city.outlets" ui-sref="main.app.outlets({outletCode: outlet.code})" ng-click="gotoOutlet()">
+      {{outlet.name}}
+    </div> -->
+    <button class="button button-full" ng-repeat="outlet in city.outlets" style="text-align: left; color: #c52031; margin-bottom: 8px;" ui-sref="main.app.outlets({outletCode: outlet.code})" ng-click="gotoOutlet()">{{outlet.name}}</button>
+  </div>
+</div>

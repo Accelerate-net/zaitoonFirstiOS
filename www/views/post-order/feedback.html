@@ -1,0 +1,62 @@
+<!-- main.app.feed.fashion -->
+<ion-view class="checkout-feedback-view" cache-view="false">
+  <ion-content has-bouncing="false" class="checkout-thanks-content">
+    <div class="row thanks-row" style="margin-top: 50px">
+      <div class="col">
+        <h3 class="thanks-title" style="color: #FFF; margin: 0">Rate your recent experience with Zaitoon?</h3>
+        <p style="font-size: 12px; color: #dce1ec; margin: 0; padding: 8px 15px 0px 15px">{{lastOrderBrief}}</p>
+        <h3>
+        <span class="icon ion-android-star-outline" id="star1" ng-click="fillTill(1)"></span>
+        <span class="icon ion-android-star-outline" id="star2" ng-click="fillTill(2)"></span>
+        <span class="icon ion-android-star-outline" id="star3" ng-click="fillTill(3)"></span>
+        <span class="icon ion-android-star-outline" id="star4" ng-click="fillTill(4)"></span>
+        <span class="icon ion-android-star-outline" id="star5" ng-click="fillTill(5)"></span>
+        <br><p ng-if="tag!=''" style="color: #FFF; font-weight: 400;">{{tag}}</p>
+        </h3>
+
+        <div ng-if="selection=='N'" class="card list filter-group">
+          <div class="item item-divider">
+            Where can we improve?
+          </div>
+            <div ng-if="1">
+              <ion-list class="tags-filters filter-options-container">
+                <tag-checkbox ng-model="negative_feedback.delivery" title="Delivery Time"></tag-checkbox>
+                <tag-checkbox ng-model="negative_feedback.quality" title="Package Quality"></tag-checkbox>
+                <tag-checkbox ng-model="negative_feedback.food" title="Food"></tag-checkbox>
+                <tag-checkbox ng-model="negative_feedback.service" title="Service"></tag-checkbox>
+                <tag-checkbox ng-model="negative_feedback.app" title="App Experience"></tag-checkbox>
+                <tag-checkbox ng-model="negative_feedback.other" title="Other"></tag-checkbox>
+              </ion-list>
+            </div>
+        </div>
+
+        <div ng-if="selection=='P'" class="card list filter-group">
+          <div class="item item-divider">
+            What made it more awesome?
+          </div>
+            <div ng-if="1">
+              <ion-list class="tags-filters filter-options-container">
+                <tag-checkbox ng-model="positive_feedback.delivery" title="Quick Delivery"></tag-checkbox>
+                <tag-checkbox ng-model="positive_feedback.quality" title="Served Fresh/Hot"></tag-checkbox>
+                <tag-checkbox ng-model="positive_feedback.food" title="Awesome Food"></tag-checkbox>
+                <tag-checkbox ng-model="positive_feedback.service" title="Excellent Service"></tag-checkbox>
+                <tag-checkbox ng-model="positive_feedback.app" title="Cool App"></tag-checkbox>
+                <tag-checkbox ng-model="positive_feedback.other" title="Other"></tag-checkbox>
+              </ion-list>
+            </div>
+        </div>
+
+        <div style="padding: 15px" ng-show="selection=='N' || selection=='P'">
+          <textarea class="feedbackComments" style="resize: none; line-height: 21px;" rows="2" id="commentsBox" placeholder="Any comments?" ng-model="commentsFeed"></textarea>
+          <p id="characterCount" style="float: left; padding: 5px 0px; font-weight:300; color: #dce1ec; font-size: 80%"></p>
+        </div>
+
+        <div class="ok-button-outer" ng-show="selection=='N' || selection=='P'">
+          <a class="button button-block ok-button" ng-click="submitFeedback(commentsFeed)">
+            Submit
+          </a>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

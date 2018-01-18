@@ -1,0 +1,57 @@
+.login-view
+{
+
+	background: #e74c3c;
+	background-image: url("../img/walkthrough/pattern.png");
+  background-repeat: repeat;
+
+	.item-input{
+		color: #ff4300;
+		border: none;
+		border-radius: 0px;
+		border-bottom: 1px dashed #ff4300;
+		font-size: 18px;
+	}
+
+	img{
+		align: middle;
+	}
+	
+	.images-row
+	{
+		padding-top: 30px;
+		// height: 27%;
+
+
+		.illustration-container
+		{
+			margin: 0px auto;
+			width: 80vw;
+		}
+	}
+
+	.form-row
+	{
+		height: 73%;
+	}
+
+	.facebook-button
+	{
+		margin-top: 6vh;
+	}
+
+	.form-divider
+	{
+		margin: 5vh 0px;
+	}
+
+	.auth-action-button
+	{
+		margin-top: 2vh;
+	}
+
+	.alternative-actions
+	{
+		margin-top: 1vh;
+	}
+}

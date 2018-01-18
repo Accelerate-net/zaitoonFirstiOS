@@ -1,0 +1,174 @@
+<ion-view class="feed-deals-view feed-sub-view" cache-view="false">
+
+  <ion-header-bar class="myHeaderRed">
+    <h1 class="title myWhiteFont">Offers</h1>
+    <div class="buttons" ng-if="isLoggedIn" style="position: absolute; right: 5px">
+      <button class="button button-clear cancel-button" style="color: #FFF" ng-click="showHistory()"><i class="fa fa-ticket"></i> My Purchases</button>
+    </div>
+	
+  </ion-header-bar>
+
+
+  <ion-content padding>
+<!--
+    <ion-slide-box class="product-images-slider">
+      <ion-slide>
+        <div class="image-container">
+          <pre-img ratio="full">
+            <img class="product-image" ng-src="{{product.image}}" spinner-on-load/>
+          </pre-img>
+        </div>
+      </ion-slide>
+      <ion-slide ng-repeat="product_image in product.showcase_images track by $index">
+        <div class="image-container" multi-bg="[product_image]"></div>
+      </ion-slide>
+    </ion-slide-box>
+
+     -->
+
+    <div class="products-row" style="padding-bottom: 55px">
+
+      <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
+
+      <div ng-if="isEmpty" class="padding">
+        <p style="color: #C7C7C7; text-align: center">There are no offers running.</p>
+      </div>
+
+      <div ng-if="!isCombosEmpty" class="card deals-product-container" ng-repeat="combo in combos">
+        <div class="row row-center top-row" style="border: none; background: #c52031">
+          <div class="col col-100 shop-col">
+            <button class="button shop-button-combo" style="background: none; color: #FFF; float: left">
+              COMBO OFFER
+            </button>
+            <button ng-if="!combo.isAvailable" class="button button-small button-outline button-info" style="float: right; border-color: #a71d2b; color: #a71d2b">
+              Out of Stock
+            </button>
+            <button ng-if="combo.isAvailable" ng-click=addComboToCart(combo) class="button button-small button-outline button-balanced" style="float: right; border-color: #FFF; color: #FFF">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="row" ng-if="combo.isImageAvailable">
+          <img width="100%" height="100%" src="{{combo.url}}">
+        </div>
+
+        <div class="row middle-row">
+          <div class="col col-100">
+            <h5 class="product-title">
+              <a class="product-anchor" style="color: #c52031; font-size: 16px; font-weight: 300">{{combo.itemName}}<tag style="float: right; font-size: 18px; color: #05bf84; font-weight: bold;"><i  class="fa fa-inr" style="font-size: 80%; font-weight: 300"></i>{{combo.itemPrice}}</tag></a>
+            </h5>
+            <p class="product-description" style="font-weight: 300; color: #162433">
+              {{combo.combo}}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div ng-if="!isEmpty" class="card deals-product-container" ng-repeat="deal in deals">
+
+        <div class="row row-center top-row" ng-if="deal.type=='coupon'">
+          <div class="col col-100 shop-col">
+            <button ng-if="deal.code" class="button shop-button" style="background: #2ecc71">
+              {{deal.code}}
+            </button>
+          </div>
+        </div>
+
+
+        <div class="row middle-row" ng-if="deal.type=='coupon'">
+          <div class="col col-100">
+            <h5 class="product-title">
+              <a class="product-anchor" style="color: #c52031; font-size: 16px; font-weight: 300">COUPON OFFER</a>
+            </h5>
+            <p class="product-description" style="font-weight: 300; color: #162433">
+              {{deal.description}}
+            </p>
+          </div>
+        </div>
+
+		
+        <div class="row middle-row-special" ng-if="deal.type=='purchase'">
+          <div class="col col-100">		      
+			  
+			  <pre-img ratio="_5_3">
+                 <img ng-if="deal.isImageAvailable" src="{{deal.url}}" class="myDealsImg" spinner-on-load>
+				 <!--<img class="product-image" ng-src="{{ product.image }}" > -->
+              </pre-img>
+			  
+			  
+           
+            <p class="product-description" style="font-weight: 300; color: #162433">
+              {{deal.description}}
+            </p>
+          </div>
+        </div>
+
+		
+		
+		
+		
+        <div class="row middle-row-special" ng-if="deal.type=='promotion'">
+          <div class="col col-100" ng-if="deal.type=='promotion'">		      
+			  
+			  <pre-img ratio="_5_3">
+                 <img ng-if="deal.isImageAvailable" src="{{deal.url}}" class="myDealsImg" spinner-on-load>
+				 <!--<img class="product-image" ng-src="{{ product.image }}" > -->
+              </pre-img>
+			  
+			  
+           
+            <p class="product-description" style="font-weight: 300; color: #162433">
+              {{deal.description}}
+            </p>
+          </div>
+        </div>
+
+        <div class="row middle-row" ng-if="deal.type=='offer'">
+          <div class="col col-100">
+            <h5 class="product-title">
+              <a class="product-anchor" style="color: #c52031; font-size: 16px; font-weight: 300">SPECIAL OFFER</a>
+            </h5>
+            <p class="product-description" style="font-weight: 300; color: #162433">
+              {{deal.description}}
+            </p>
+          </div>
+        </div>
+
+
+        <div class="row bottom-row" ng-if="deal.type!='promotion'">
+    		  <div class="col">
+                    <button ng-if="deal.isCustom" class="button button-small button-outline button-balanced" ng-click="customDealsOptions(deal)">Buy Offer at <i class="fa fa-inr" style="font-size: 80%; font-weight: 300"></i><price style="font-weight: bold">{{deal.itemPrice}}</price></button>
+                    <button ng-if="!deal.isCustom" class="button button-small button-outline button-balanced" ng-click="addToDealsCart(deal)">Buy Offer at <i class="fa fa-inr" style="font-size: 80%; font-weight: 300"></i><price style="font-weight: bold">{{deal.itemPrice}}</price></button>
+    		  </div>
+          <div class="col time-col">
+            <div class="time-left-container">
+              <span class="deal-time-left" style="font-weight: 300">Valid till {{deal.validTill}}</span>
+              <i class="icon ion-android-time"></i>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <i ng-if="!left"><center><img src=img/common/end.png></center></i>
+    <ion-infinite-scroll
+      immediate-check="false"
+      ng-if="left"
+      on-infinite="loadMore()"
+      distance="1%">
+    </ion-infinite-scroll>
+
+  </ion-content>
+  
+  
+	<div class="quickCart" ng-if="cartLength" ng-click="goDealsCart()">
+	    <span><img src="img/feed/deals.png" width="30px"><span class="cartBadge cartSize" id="quickCartCount">{{cartLength}}</span></span>
+	</div>     
+
+	
+  
+</ion-view>

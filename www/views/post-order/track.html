@@ -1,0 +1,215 @@
+<!-- main.app.feed.fashion -->
+<ion-view class="checkout-thanks-view" id="pageTrack" cache-view="false">
+  <ion-header-bar class="shopping-cart-header" style="background: #a71d2b;">
+    <div class="buttons">
+      <button class="button button-clear" style="width: 35px" ui-sref="main.app.account.orders()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
+    </div>
+
+    <h1 class="title" ng-if="track.status" style="color: #FFF; font-weight: 200">#{{track.response.orderID}}</h1>
+  </ion-header-bar>
+
+  <ion-content has-bouncing="false" class="checkout-thanks-content">
+    <div class="row thanks-row">
+      <div class="col">
+      <div class="padding" ng-if="!track.status"><p style="color: #e74c3c; font-size: 18px; text-align: center; margin-top: 50px;"></p></div>
+
+      <div ng-if="status == 0">
+        <h3 class="thanks-title" style="color: #a71d2b">Your order has been placed. Hold on while we confirm your order.</h3>
+        <center><img src="./img/track/pending.png" width="30%"></center>
+        <center><img ng-src="./img/track/loading.gif" width="50px"/></center>
+
+        <button style="margin-top: 60px" class="button icon-left ion-information-circled button-clear button-assertive button-small" ng-if="!displayInfo" ng-click="showInfo()">More Info</button>
+
+        <div style="margin: 15px 10px; padding: 10px; background: #FBFBFB; position: fixed; bottom: 0;" ng-if="displayInfo">
+          <button class="button button-clear cancel-button ion-close" style="position: absolute; right: -5px; top: -5px; padding: 0px;" ng-click="clearInfo()"></button>
+          <p style="color: #7f8c8d; margin: 0; font-size: 10px">This order is placed at</p>
+          <hr style="border: none; border-top: 1px solid #F2F3F3;">
+          <p style="color: #A4A4A4; font-size: 14px; padding: 15px 15px 0px 15px">Zaitoon {{track.response.outletAddress}}</p>
+          <p style="color: #A4A4A4; font-size: 14px">Call <b>{{track.response.outletContact}}</b></p>
+        </div>
+      </div>
+
+
+      <div ng-if="status == 1">
+        <h3 class="time-title" style="color: #7f8c8d">{{track.response.date}}</h3>
+
+          <ul class="timeline" id="timeline" style="margin-bottom: 40px">
+            <li class="li complete">
+              <div class="timestamp">
+                <span class="author">{{track.response.timePlace}}</span>
+              </div>
+              <div class="status">
+                <h4>Received</h4>
+              </div>
+            </li>
+            <li class="li complete">
+              <div class="timestamp">
+                <span class="author">{{track.response.timeConfirm}}</span>
+              </div>
+              <div class="status">
+                <h4>Confirmed</h4>
+              </div>
+            </li>
+            <li class="li">
+              <div class="timestamp">
+                <span class="author"> - </span>
+              </div>
+              <div class="status">
+                <h4 ng-if="!isTakeAway">Dispatched</h4>
+                <h4 ng-if="isTakeAway">Ready</h4>
+              </div>
+            </li>
+            <li class="li">
+              <div class="timestamp">
+                <span class="author"> - </span>
+              </div>
+              <div class="status">
+                <h4>Completed</h4>
+              </div>
+            </li>
+           </ul>
+
+        <center>
+          <img src="./img/track/confirmed.png" width="40%">
+          <h2 style="color: #a71d2b; font-weight: 200; font-size: 21px">ORDER<br><status style="font-weight: 700; font-size: 28px">CONFIRMED</status></h2>
+          <button style="margin-top: 60px" class="button icon-left ion-information-circled button-clear button-assertive button-small" ng-if="!displayInfo" ng-click="showInfo()">More Info</button>
+        </center>
+
+        <div style="margin: 15px 10px; padding: 10px; background: #FBFBFB; position: fixed; bottom: 0;" ng-if="displayInfo">
+          <button class="button button-clear cancel-button ion-close" style="position: absolute; right: -5px; top: -5px; padding: 0px;" ng-click="clearInfo()"></button>
+          <p style="color: #7f8c8d; margin: 0; font-size: 10px">This order is being prepared at</p>
+          <hr style="border: none; border-top: 1px solid #F2F3F3;">
+          <p style="color: #A4A4A4; font-size: 14px; padding: 15px 15px 0px 15px">Zaitoon {{track.response.outletAddress}}</p>
+          <p style="color: #A4A4A4; font-size: 14px">Call <b>{{track.response.outletContact}}</b></p>
+        </div>
+      </div>
+
+      <div ng-if="status == 2">
+        <h3 class="time-title" style="color: #7f8c8d">{{track.response.date}}</h3>
+
+        <ul class="timeline" id="timeline" style="margin-bottom: 40px">
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timePlace}}</span>
+            </div>
+            <div class="status">
+              <h4>Received</h4>
+            </div>
+          </li>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timeConfirm}}</span>
+            </div>
+            <div class="status">
+              <h4>Confirmed</h4>
+            </div>
+          </li>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timeDispatch}}</span>
+            </div>
+            <div class="status">
+              <h4 ng-if="!isTakeAway">Dispatched</h4>
+              <h4 ng-if="isTakeAway">Ready</h4>
+            </div>
+          </li>
+          <li class="li">
+            <div class="timestamp">
+              <span class="author"> - </span>
+            </div>
+            <div class="status">
+              <h4>Completed</h4>
+            </div>
+          </li>
+         </ul>
+
+
+      <div ng-if="!isTakeAway">
+         <center>
+           <img src="./img/track/dispatched.png" width="40%">
+           <h2 style="color: #a71d2b; font-weight: 200; font-size: 21px">ORDER<br><status style="font-weight: 700; font-size: 28px">DISPATCHED</status></h2>
+           <a style="color: #c52031; text-decoration: none; margin-top: 20px" ng-if="track.response.agentMobile != ''" href="tel:{{track.response.agentMobile}}">through Mr. <b>{{track.response.agentName}}</b> <call style="background: #c52031; color: #FFF; padding: 2px 8px; border-radius: 8px;"><i class="icon ion-android-call"></i> {{track.response.agentMobile}}</call> </a><br>
+           <button style="margin-top: 40px" class="button icon-left ion-information-circled button-clear button-assertive button-small" ng-if="!displayInfo" ng-click="showInfo()">More Info</button>
+         </center>
+
+         <div style="margin: 15px 10px; padding: 10px; background: #FBFBFB; position: fixed; bottom: 0;" ng-if="displayInfo">
+           <button class="button button-clear cancel-button ion-close" style="position: absolute; right: -5px; top: -5px; padding: 0px;" ng-click="clearInfo()"></button>
+           <p style="color: #7f8c8d; margin: 0; font-size: 10px">Order was dispatched from</p>
+           <hr style="border: none; border-top: 1px solid #F2F3F3;">
+           <p style="color: #A4A4A4; font-size: 14px; padding: 15px 15px 0px 15px">Zaitoon {{track.response.outletAddress}}</p>
+           <p style="color: #A4A4A4; font-size: 14px">Call <b>{{track.response.outletContact}}</b></p>
+         </div>
+      </div>
+
+      <div ng-if="isTakeAway">
+         <center>
+           <img src="./img/track/ready.png" width="40%">
+           <h2 style="color: #a71d2b; font-weight: 200; font-size: 21px">ORDER<br><status style="font-weight: 700; font-size: 28px">READY</status></h2>
+           <button style="margin-top: 60px" class="button icon-left ion-information-circled button-clear button-assertive button-small" ng-if="!displayInfo" ng-click="showInfo()">More Info</button>
+         </center>
+
+         <div style="margin: 15px 10px; padding: 10px; background: #FBFBFB; position: fixed; bottom: 0;" ng-if="displayInfo">
+           <button class="button button-clear cancel-button ion-close" style="position: absolute; right: -5px; top: -5px; padding: 0px;" ng-click="clearInfo()"></button>
+           <p style="color: #7f8c8d; margin: 0; font-size: 10px">Order is ready for pick up at</p>
+           <hr style="border: none; border-top: 1px solid #F2F3F3;">
+           <p style="color: #A4A4A4; font-size: 14px; padding: 15px 15px 0px 15px">Zaitoon {{track.response.outletAddress}}</p>
+           <p style="color: #A4A4A4; font-size: 14px">Call <b>{{track.response.outletContact}}</b></p>
+         </div>
+      </div>
+
+
+      <div ng-if="status == 3">
+        <h3 class="time-title" style="color: #7f8c8d">{{track.response.date}}</h3>
+
+        <ul class="timeline" id="timeline" style="margin-bottom: 40px">
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timePlace}}</span>
+            </div>
+            <div class="status">
+              <h4>Received</h4>
+            </div>
+          </li>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timeConfirm}}</span>
+            </div>
+            <div class="status">
+              <h4>Confirmed</h4>
+            </div>
+          </li>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timeDispatch}}</span>
+            </div>
+            <div class="status">
+              <h4 ng-if="!isTakeAway">Dispatched</h4>
+              <h4 ng-if="isTakeAway">Ready</h4>
+            </div>
+          </li>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="author">{{track.response.timeDeliver}}</span>
+            </div>
+            <div class="status">
+              <h4>Completed</h4>
+            </div>
+          </li>
+         </ul>
+
+         <center>
+           <img src="./img/track/completed.png" width="40%">
+           <h2 style="color: #a71d2b; font-weight: 200; font-size: 21px">ORDER<br><status style="font-weight: 700; font-size: 28px">COMPLETED</status></h2>
+         </center>
+      </div>
+      </div>
+
+      <div ng-if="status == 5">
+        <h3 class="thanks-title" style="color: #e74c3c; font-weight: 250; margin-top: 30px">This order has been cancelled.</h3>
+        <h3 class="thanks-title" ></h3>
+      </div>
+
+
+    </div>
+  </ion-content>
+</ion-view>

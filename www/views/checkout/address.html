@@ -1,0 +1,66 @@
+<ion-view class="checkout-address-view" cache-view="false">
+  <ion-header-bar class="checkout-address-header">
+    <button class="button button-clear" style="width: 35px;" ng-click="cancel()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
+  </ion-header-bar>
+  <ion-content class="checkout-address-content" has-bouncing="false">
+    <div class="row everything-else-row">
+      <div class="col">
+        <div ng-if="user_shipping_addresses.length == 0">
+          <div class="new-address-button-outer">
+            <button class="button button-block new-address-button" ng-click="showNewAddressPopup()">
+              New Delivery Address
+            </button>
+          </div>
+        </div>
+        <div ng-if="user_shipping_addresses.length > 0">
+          <h3 class="shipping-address-title">Select Delivery Address</h3>
+          <div class="address-chooser" ng-click="openAddressesPopover($event)">
+            <button class="button button-block icon-right addresses-popover-button" ng-class="{'ion-chevron-up': addresses_popover.isShown(), 'ion-chevron-down' : !addresses_popover.isShown()}">
+              {{data.selected_address.name || 'Choose an Address'}}
+            </button>
+          </div>
+        </div>
+
+        <div class="address-details-container" ng-show="data.selected_address.street">
+          <div class="row">
+            <label class="col item item-input item-stacked-label">
+              <span class="input-label">Full Name</span>
+              <p class="input-data">{{data.selected_address.name}}</p>
+            </label>
+          </div>
+          <div class="row">
+            <label class="col col-50 item item-input item-stacked-label">
+              <span class="input-label">Flat/House No.</span>
+              <p class="input-data">{{data.selected_address.flatNo}}</p>
+            </label>
+            <label class="col col-50 item item-input item-stacked-label">
+              <span class="input-label">House Name</span>
+              <p class="input-data">{{data.selected_address.flatName}}</p>
+            </label>
+          </div>
+          <div class="row">
+            <label class="col col-50 item item-input item-stacked-label">
+              <span class="input-label">Landmark</span>
+              <p class="input-data">{{data.selected_address.landmark}}</p>
+            </label>
+            <label class="col col-50 item item-input item-stacked-label">
+              <span class="input-label">Locality</span>
+              <p class="input-data">{{data.selected_address.area}}</p>
+            </label>
+          </div>
+          <div class="row">
+            <label class="col item item-input item-stacked-label">
+              <span class="input-label">Phone</span>
+              <p class="input-data">{{data.selected_address.contact}}</p>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row actions-row">
+      <div class="col">
+        <a class="button button-full action-button" ng-click="saveSelectedAddress(data.selected_address)">Save Address & Continue</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,17 @@
+<ion-scroll direction="y" ng-controller="FiltersCtrl">
+
+  <div class="card list filter-group range-filter-group">
+    <div class="price-filters">
+      <div class="item item-divider">
+        Price
+      </div>
+      <div class="item range">
+        <section class="range-slider" data-range-slider ng-model="price_filter" min="price_filter_range.min" max="price_filter_range.max" ticks="true"></section>
+      </div>
+      <div class="range-output-container">
+        <span class="range-output">$ {{price_filter.from}}</span>
+        <span class="range-output">$ {{price_filter.to}}</span>
+      </div>
+    </div>
+  </div>
+</ion-scroll>
