@@ -1,0 +1,23 @@
+<ion-popover-view class="address-chooser-popover" ng-class="{'contains-3-items' : (addressCount>2?true:false), 'contains-2-items' : (addressCount>1?true:false), 'contains-1-items' : (addressCount>=0?true:false),  'has-bottom-button' : show_new_address_button}">
+  <ion-content has-bouncing="false">
+    <ion-scroll class="addresses-scroller" direction="y">
+      <div class="list addresses-list">
+        <div class="address-item row row-center" ng-repeat="address in user_shipping_addresses">
+          <label class="col col-80 item item-radio">
+        		<input type="radio" name="pick_address" ng-model="data.selected_address" ng-value="address" ng-change="selectShippingAddress(address)">
+        		<div class="radio-content">
+        			<div class="item-content disable-pointer-events">
+                <span class="address-name">{{address.line1}}</span>
+              </div>
+        			<i class="radio-icon disable-pointer-events icon ion-checkmark"></i>
+        		</div>
+        	</label>
+        	<a class="col col-20 button button-clear edit-address-button" ng-click="showEditAddressPopup(address)">Edit</a>
+        </div>
+      </div>
+    </ion-scroll>
+    <button class="button button-full new-address-button" ng-click="showNewAddressPopup($event)" ng-show="show_new_address_button">
+      Add an Address
+    </button>
+  </ion-content>
+</ion-popover-view>

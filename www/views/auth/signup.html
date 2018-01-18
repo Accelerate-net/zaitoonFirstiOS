@@ -1,0 +1,57 @@
+<ion-view class="login-view auth-view" cache-view="false">
+  <ion-content has-bouncing="false" scroll="false">
+
+    <div class="row">
+      <div class="col col-center">
+        <center>
+          <img width="70%" style="max-width: 320px; margin: 30px 0px; " ng-src="./img/common/white_logo.png"/>
+        </center>
+      </div>
+    </div>
+
+    <div class="row form-row" style="padding-top: 50px">
+      <div class="col">
+        <form name="signup_form" class="form-container" novalidate>
+          <div class="input-list list list-inset">
+            <div ng-if="!signupFlag">
+            <label class="item item-input">
+              <input type="text" placeholder="Name" name="name" ng-model="user.name" required>
+            </label>
+            <label class="item item-input">
+              <input type="tel" placeholder="Mobile Number" name="mobile" ng-model="user.mobile" required maxlength="10">
+            </label>
+            <label class="item item-input">
+              <input type="text" placeholder="Email" name="email" ng-model="user.email" required>
+            </label>
+          </div>
+          <div ng-if="signupFlag">
+            <label class="item item-input">
+              <input type="tel" placeholder="Enter OTP" name="otp" ng-model="user.otp" required>
+            </label>
+          </div>
+        </div>
+          <p ng-show="error" class="message error-signup">{{error}}</p>
+          <button type="submit" class="button button-block auth-action-button-signup" ng-if="!signupFlag" ng-click="validateSignUp()" ng-disabled="signup_form.$invalid">
+            Proceed
+          </button>
+          <button type="submit" class="button button-block auth-action-button-signup" ng-if="signupFlag" ng-click="doSignUp()" ng-disabled="signup_form.$invalid">
+            Sign Up
+          </button>
+
+        </form>
+        <div class="alternative-actions">
+          <a class="action-link button button-small button-clear" ui-sref="intro.auth-login()">Login</a>
+          <a class="action-link button button-small button-clear" ui-sref="main.app.feed.arabian()">Skip</a>
+        </div>
+        <div style="color: #E3CDCD; font-size: 10px; text-align: center; font" ng-if="!signupFlag">
+          <a style="color: #E3CDCD; text-decoration: underline" ng-click="showTerms()">Terms of Service</a> |
+          <a style="color: #E3CDCD; text-decoration: underline" ng-click="showPrivacyPolicy()">Privacy Policy</a>
+        </div>
+        <center>
+          <p id="resendOTP" ng-if="resendOTPFlag" style="text-align: center"></p>
+          <button ng-if="showResendButton" ng-click="validateSignUp()" style="color: #e67e22;" class="button button-clear button-small">Resend OTP</button>
+        </center>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,24 @@
+{
+  "name": "bazaar",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.2.4"
+  },
+  "dependencies": {
+    "bourbon": "~4.2.3",
+    "underscore": "~1.8.3",
+    "angular-moment": "^0.10.3",
+    "moment": "^2.12.0",
+    "ionmultiapp-icons": "https://bitbucket.org/picosypalas/ionmultiapp-icons.git",
+    "ngmap": "^1.17.3",
+    "ng-range-slider": "^0.2.0",
+    "font-awesome": "fontawesome#^4.7.0",
+    "ngCordova": "^0.1.27-alpha",
+    "ionic-toast": "^0.4.1",
+    "ionic-native-transitions": "shprink/ionic-native-transitions#^1.0.3"
+  },
+  "resolutions": {
+    "moment": ">=2.8.0 <2.11.0",
+    "underscore": "~1.8.3"
+  }
+}

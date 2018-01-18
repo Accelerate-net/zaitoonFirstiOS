@@ -1,0 +1,47 @@
+<ion-view class="feed-deals-view" cache-view="false">
+
+  <ion-header-bar class="myHeaderRed">
+	<button class="button button-clear" style="width: 35px" ui-sref="main.app.deals()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>  
+    <h1 class="title myWhiteFont" style="font-weight: 300; padding-left: 10px">Purchased Passes</h1>	
+  </ion-header-bar>
+
+  
+    <ion-content style="padding-top: 20px">
+    <div class="orders-row">
+      <div ng-if="isEmpty"><p style="color: #C7C7C7; text-align: center">You have not purchased or claimed any Offers yet.</p></div>
+      <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
+      <div ng-if="isFail"><p style="color: #C7C7C7; text-align: center">{{failMsg}}</p></div>
+      <div class="card order-item" ng-repeat="order in orders">
+        <div class="item item-divider order-header">
+          <span class="header-title">{{order.date | amDateFormat:'DD MMM, YYYY'}}<jafry style="color:white; float:right">#{{order.orderID}}</jafry></span>
+        </div>
+        <div class="item item-text-wrap order-content">
+          <div class="row order-product" ng-repeat="product in order.cart.items track by $index" style="padding: 5px 8px">
+            <div class="col col-67 col-center name-col">
+              <span class="product-name">{{product.itemName}}<tag ng-if="product.isCustom" style="font-size: 80%"> ({{product.variant}})</tag></span>
+            </div>
+            <div class="col col-20 col-center">
+              <span class="product-qty">x {{product.qty}}</span>
+            </div>
+            <div class="col col-center">
+              <span class="product-price"><i class="fa fa-inr"></i> {{product.itemPrice}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="item item-divider order-footer">
+          <div class="button button-small button-outline button-primary" style="float: right; margin-top:5px" ng-click="openPasses(order.orderID)">View Passes</div>
+        </div>
+
+      </div>
+    </div>
+    <i ng-if="!left"><center><img src=img/common/end.png></center></i>
+    <ion-infinite-scroll
+      immediate-check="false"
+      ng-if="left"
+      on-infinite="loadMore()"
+      distance="1%">
+    </ion-infinite-scroll>
+  </ion-content>
+  
+  
+</ion-view>

@@ -1,2 +1,2 @@
-# zaitoonFirstiOS
-iOS Version of Zaitoon App
+# zaitoonFirst
+Online food order app of Zaitoon 

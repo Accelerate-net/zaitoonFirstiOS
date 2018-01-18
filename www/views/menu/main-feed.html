@@ -1,0 +1,134 @@
+      <ion-side-menus class="feed-view" cache-view="true">
+         <ion-side-menu-content>
+<ion-header-bar class="feed-header">
+    <div class="buttons" style="position: absolute; top: 5px; left: 5px; bottom: 5px;">
+      <button class="button button-clear cart-button" style="margin: 0; color: #FFF; width: 35px;" ng-click="showOptionsMenu()">
+        <i class="icon ion-navicon" ng-if="1"></i> 
+        <!-- <i class="fa fa-chevron-left" ng-if="navToggled"></i> -->
+        <!-- <img class="cart-image" ng-src="./img/feed/wallet-icon.png"/> -->
+      </button>
+    </div>
+
+
+
+            <div class="buttons" style="position: absolute; top: 5px; left: 42px; bottom: 5px;">
+              <button class="button button-clear cart-button" ng-click="callSearch()">
+              <img class="cart-image" ng-src="./img/feed/search.png"/>
+              </button>
+            </div>
+
+
+
+    <!--
+        <div class="buttons" style="position: absolute; top: 5px; left: 110px; bottom: 5px;">
+          <button class="button button-clear cart-button" ng-click="showOutlets()">
+          <img class="cart-image" ng-src="./img/feed/shop.png"/>
+          </button>
+        </div>
+
+        <div class="buttons" style="position: absolute; top: 5px; left: 77px; bottom: 5px;">
+          <button class="button button-clear cart-button" ng-click="showHelp()">
+          <img class="cart-image" ng-src="./img/feed/help.png"/>
+          </button>
+        </div>
+
+      -->
+
+
+
+
+    <!-- <div class="logo-container">
+      <img class="logo-image" ng-src="./img/feed/logo.png"/>
+    </div> -->
+    <div class="buttons">
+      <button class="button button-clear cart-button" ui-sref="main.app.shopping-cart()">
+        <span class="badge cart-badge">{{getProductsInCart()}}</span>
+        <img class="cart-image" ng-src="./img/feed/cart-icon.png"/>
+      </button>
+    </div>
+  </ion-header-bar>
+  
+  
+            <ion-nav-view animation="slide-left-right">
+			
+  <ion-content class="categories-feeds-content" overflow-scroll="true" has-bouncing="false" delegate-handle="feeds-content">
+    <sliding-list style="background: #c52031">
+    	<ul center-edges class="sliding-list">
+        <sliding-item state="main.app.feed.arabian" id="arabianSlide">
+          <a nav-transition="android" ui-sref="main.app.feed.arabian()">Arabian</a>
+        </sliding-item>
+        <sliding-item state="main.app.feed.chinese">
+          <a nav-transition="android" ui-sref="main.app.feed.chinese()">Chinese</a>
+        </sliding-item>
+        <sliding-item state="main.app.feed.indian">
+          <a nav-transition="android" ui-sref="main.app.feed.indian()">Indian</a>
+        </sliding-item>
+        <sliding-item state="main.app.feed.dessert">
+          <a nav-transition="android" ui-sref="main.app.feed.dessert()">Desserts</a>
+        </sliding-item>
+    	</ul>
+    </sliding-list>
+    <ion-nav-view name="category-feed" class="category-feed"></ion-nav-view>
+  </ion-content>			
+			
+			
+			</ion-nav-view>
+         </ion-side-menu-content>
+
+
+<ion-side-menu side="left" class="main-menu" expose-aside-when="large">
+    <ion-content>
+      <ion-list>
+        <ion-item class="item" nav-clear menu-close ui-sref="">
+          <center>
+            <img style="width: 100%" ng-src="./img/common/white_logo.png"/>
+          </center>
+        </ion-item>
+
+		
+		    <ion-item class="item-icon-left" ng-show="isLoggedIn" nav-clear menu-close ui-sref="main.app.account.orders">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_orders.png"/></i>
+          <h2 class="menu-text">My Orders</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="main.app.deals">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_offers.png"/></i>
+          <h2 class="menu-text">Offers</h2>
+        </ion-item>        
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="main.app.rewardslanding">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_rewards.png"/></i>
+          <h2 class="menu-text">Zaitoon Rewards</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="" ng-click="showOutlets()">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_reserve.png"/></i>
+          <h2 class="menu-text">Book a Table</h2>
+        </ion-item>
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="main.app.branches">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_outlet.png"/></i>
+          <h2 class="menu-text">Zaitoon Outlets</h2>
+        </ion-item>		
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="" ng-click="changeLocation()">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_location.png"/></i>
+          <h2 class="menu-text">Change Location</h2>
+        </ion-item>
+
+        <ion-item class="item-icon-left" ng-show="isLoggedIn" nav-clear menu-close ui-sref="main.app.account.profile">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_profile.png"/></i>
+          <h2 class="menu-text">My Account</h2>
+        </ion-item>
+
+
+        <ion-item class="item-icon-left" nav-clear menu-close ui-sref="" ng-click="showHelp()">
+          <i class="icon"><img class="cart-image" style="width: 50%; max-width: 60px;" ng-src="./img/feed/nav/nav_support.png"/></i>
+          <h2 class="menu-text">Customer Support</h2>
+        </ion-item>
+
+    </ion-list>
+
+    <p style="margin-left: 15px; position: absolute; color: #5a1011; bottom: 0px; font-size: 12px;">Version 1.3.2</p>
+    </ion-content>
+  </ion-side-menu>
+
+
+         
+      </ion-side-menus>
+	  

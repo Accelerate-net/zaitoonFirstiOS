@@ -1,0 +1,480 @@
+.feed-deals-view
+{
+	background-color: $deals-view-bg;
+
+	.product-images-slider
+	{
+		height: $fashion-content-images-slider-height + $fashion-content-images-slider-padding;
+		padding-bottom: $fashion-content-images-slider-padding;// For the slider pager
+
+		.image-container
+		{
+			height: 100%;
+
+			.pre-img.full
+			{
+				padding: 0px;
+				height: 100%;
+				width: 100%;
+				@include display(flex);
+				@include align-items(center);
+				@include justify-content(center);
+
+				ng-transclude
+				{
+					height: 100%;
+				}
+			}
+
+			.product-image
+			{
+				height: $fashion-content-images-slider-height;
+				position: initial;
+			}
+
+			&.multi-bg-outer
+			{
+				background-color: $fashion-content-multi-bg;
+
+				.bg-overlay
+				{
+					opacity: 0;
+				}
+			}
+		}
+
+		.slider-pager
+		{
+			bottom: 0px;
+			margin: (($fashion-content-images-slider-padding - 15px)/2) 0px;
+
+			.slider-pager-page
+			{
+				background-color: $fashion-content-images-slider-pager-bg;
+				border: 1px solid $fashion-content-images-slider-pager-color;
+				border-radius: 50%;
+				width: 10px;
+				height: 10px;
+				margin: -1px 5px 0px;
+				opacity: 0.8;
+
+				&.active
+				{
+					background-color: $fashion-content-images-slider-pager-color;
+					opacity: 1;
+				}
+
+				.icon
+				{
+					display: none;
+				}
+			}
+		}
+	}
+	
+
+	.products-row
+	{
+		margin-top: 5px;
+		padding-bottom: 5px;
+
+		.deals-product-container
+		{
+			margin: 10px 10px;
+			box-shadow: none;
+			border-radius: 6px;
+			padding: 0px;
+
+			&:last-child
+			{
+				margin-bottom: 2px;
+			}
+
+			.row
+			{
+				padding: 0px;
+				margin: 0px;
+
+				.col
+				{
+					padding: 0px;
+					margin: 0px;
+				}
+			}
+
+			.product-anchor
+			{
+				text-decoration: none;
+			}
+
+			.top-row
+			{
+				border-bottom: 2px dashed $deals-view-bg;
+				padding: $deals-product-top-padding 8px $deals-product-top-padding 14px;
+				height: $deals-product-top-row-height;
+
+				.logo-col
+				{
+					height: 100%;
+					@include display(flex);
+					@include align-items(center);
+
+					.deal-logo
+					{
+						display: block;
+						max-height: 100%;
+					}
+				}
+
+				.shop-col
+				{
+					height: 100%;
+					text-align: left;
+
+					.shop-button
+					{
+						min-height: 0px;
+						height: $deals-product-shop-button-height;
+						line-height: $deals-product-shop-button-height - 5px;
+						border-radius: $deals-product-shop-button-height/2;
+						@include button-style($deals-shop-button-bg, $deals-shop-button-border, $deals-shop-button-active-bg, $deals-shop-button-active-border, $deals-shop-button-text);
+					}
+
+					.shop-button-combo
+					{
+						min-height: 0px;
+						height: $deals-product-shop-button-height;
+						line-height: $deals-product-shop-button-height - 5px;
+						border-radius: $deals-product-shop-button-height/2;
+						@include button-style(#3498db, #3498db, #2980b9, #2980b9, $deals-shop-button-text); //BLUE
+					}
+
+				}
+			}
+
+			.middle-row
+			{
+				padding: 24px 8px 12px 14px;
+
+				.product-title
+				{
+					color: $deals-product-color;
+					margin: 0px;
+					margin-bottom: 8px;
+
+					a
+					{
+						color: $deals-product-color;
+					}
+				}
+
+				.product-description
+				{
+					color: $deals-product-description-alternative-color;
+					font-size: 13px;
+				  line-height: 16px;
+					margin: 0px;
+				}
+
+				.bookmark-col
+				{
+					text-align: center;
+
+					.bookmark-button
+					{
+						color: $deals-bookmark-button-color;
+
+						&::before
+						{
+							font-size: 28px;
+							line-height: 28px;
+  						margin: 0px;
+						}
+					}
+				}
+			}
+
+			.middle-row-special
+			{
+				padding: 0px;
+
+				.product-title
+				{
+					color: $deals-product-color;
+					margin: 0px;
+					margin-bottom: 8px;
+
+					a
+					{
+						color: $deals-product-color;
+					}
+				}
+
+				.product-description
+				{
+					color: #e74c3c;
+					font-size: 15px;
+					padding: 6px;
+				}
+
+				.bookmark-col
+				{
+					text-align: center;
+
+					.bookmark-button
+					{
+						color: $deals-bookmark-button-color;
+
+						&::before
+						{
+							font-size: 28px;
+							line-height: 28px;
+  						margin: 0px;
+						}
+					}
+				}
+			}
+
+			.bottom-row
+			{
+				padding: 0px 8px 12px 14px;
+
+				.deal-code
+				{
+					color: $deals-code-color;
+					text-transform: uppercase;
+					padding: $deals-code-padding ($deals-code-padding*1.5);
+					border: $deals-code-border solid $deals-code-color;
+					height: $deals-code-height;
+					border-radius: $deals-code-height/2;
+					display: inline-block;
+					line-height: ($deals-code-inner-height) - (2*$deals-code-padding);
+				}
+
+				.time-col
+				{
+					text-align: right;
+					@include display(flex);
+					@include align-items(flex-end);
+
+					.time-left-container
+					{
+						color: #cdcccc;
+						display: block;
+						width: 100%;
+
+						.deal-time-left
+						{
+						  display: inline-block;
+							line-height: 24px;
+  						float: right;
+							font-size: 10px;
+
+							&.days-left-0
+							{
+								color: $deals-time-left-0d-color;
+							}
+
+							&.days-left-1
+							{
+								color: $deals-time-left-1d-color;
+							}
+						}
+
+						.icon
+						{
+						  display: inline-block;
+							height: 22px;
+							float: right;
+							margin-right: 4px;
+
+							&::before
+							{
+								font-size: 16px;
+								line-height: 22px;
+	  						margin: 0px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	  .orders-row
+  {
+    padding: 5px 15px 15px;
+
+    .order-item
+    {
+      margin: 0px 0px 15px;
+      padding: 0px;
+			box-shadow: none;
+			border-radius: 6px;
+    }
+
+    &:last-child
+    {
+      margin-bottom: 0px;
+    }
+
+    .item:first-child
+    {
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+    .item:last-child
+    {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    .order-header
+    {
+      background-color: $main_red_dark;
+      border: none;
+      margin: 0px;
+      color: $account-orders-header-color;
+      min-height: 0px;
+      height: 35px;
+      line-height: 36px;
+      padding: 0px 10px;
+
+      .header-title
+      {
+        //text-transform: uppercase;
+        font-size: 12px;
+        font-weight: 300;
+        color: #FFF;
+      }
+    }
+
+    .order-content
+    {
+      background-color: #faf7dc;
+      color: $account-color;
+      border: none;
+      margin: 0px;
+      padding: 5px 8px !important;
+
+      .row
+      {
+        padding: 0px;
+        margin: 0px;
+
+        .col
+        {
+          padding: 0px;
+          margin: 0px;
+        }
+      }
+
+      .order-product
+      {
+        border-bottom: 1px solid $account-orders-products-border;
+        padding: 0px 1px;
+
+        &:last-child
+        {
+          border: none;
+        }
+
+        .product-image-col
+				{
+          padding: 5px 0px;
+					.product-image-container
+					{
+						padding-bottom: 100%;
+
+						&.multi-bg-outer
+						{
+							background-color: $account-orders-product-pre-img-bg;
+
+              .spinner svg
+        	    {
+        	      position: absolute;
+        	    }
+
+							.bg-overlay
+							{
+								opacity: 0;
+							}
+						}
+					}
+				}
+
+        .name-col
+        {
+          @include flex(0 0 55%);
+          max-width: 55%;
+          font-weight: 500;
+        }
+
+        .product-name
+        {
+          font-weight: 300;
+          display: block;
+          font-size: 14px;
+          word-break: break-all;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .product-price
+        {
+          float: right;
+          font-size: 15px;
+          font-weight: 300;
+        }
+
+        .product-qty
+        {
+          font-size: 15px;
+          font-weight: 300;
+        }
+      }
+    }
+
+    .order-footer
+    {
+      color: $account-orders-footer-color;
+      border: none;
+      text-align: center;
+      min-height: 0px;
+      height: 45px;
+      line-height: 41px;
+      padding: 0px 15px;
+
+      &.delivered
+      {
+        border-top: 2px solid #3D3A3A;
+        background-color: #faf7dc;
+        color: #3D3A3A;
+      }
+      &.shipped
+      {
+        border-top: 2px solid #27ae60;
+        background-color: #faf7dc;
+        color: #27ae60;
+      }
+      &.canceled
+      {
+        border-top: 2px solid #c0392b;
+        background-color: #faf7dc;
+        color: #c0392b;
+      }
+
+      .status-title
+      {
+        text-transform: capitalize;
+        font-weight: 300;
+        font-size: 18px;
+      }
+    }
+  }
+	
+	
+	
+}

@@ -1,0 +1,21 @@
+<ion-popover-view class="address-chooser-popover" style="background: #FFF;" ng-class="{'contains-more-than-6-items' : true}">
+
+  <ion-content has-bouncing="false">
+    <ion-scroll class="addresses-scroller" direction="y">
+      <div class="list addresses-list">
+
+        <input type="search" placeholder="Start typing your location here" name="search_query" ng-model="search.query" ng-keyup="suggest()" style="width: 100%; border-bottom: 1px solid #e74c3c; text-align: center; padding-top: 10px; border-radius: 0">
+        <p ng-if="search.query.length < 2" style="color: #a71d2b; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-align: center; margin: 10px 0px 0px 0px">POPULAR LOCATIONS</p>
+        <ion-list>
+          <ion-item  class="myList" ng-repeat="locality in availableLocations = (localities | searchField : 'product.itemName' | filter:search.query)" ng-click="setLocality(locality_popover, locality.code)" style="background: none; border: 0px; border-bottom: 1px solid #FAFBEB; color: #e74c3c;">
+            {{locality.name}}
+          </ion-item>
+        </ion-list>
+
+        <p ng-if="availableLocations.length == 0 && (search.query).length > 1" style="text-align: center; margin: 3px; color: #e74c3c;">No match. Sure you spelled it right?</p>
+
+      </div>
+    </ion-scroll>
+
+  </ion-content>
+</ion-popover-view>

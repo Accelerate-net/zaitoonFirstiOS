@@ -1,0 +1,46 @@
+<ion-view class="feed-deals-view feed-sub-view" cache-view="false">
+
+  <ion-header-bar class="myHeaderRed">
+
+    <button class="button button-clear cancel-button" style="width: 30px" ng-click="close()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
+
+    <h1 class="title myWhiteFont">Zaitoon Outlets</h1>
+  </ion-header-bar>
+
+
+  <ion-content padding>
+
+    <div class="products-row" style="padding-bottom: 55px">
+
+      <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
+
+      <div ng-if="isEmpty" class="padding">
+        <p style="color: #C7C7C7; text-align: center">There are no outlets listed.</p>
+      </div>
+
+
+
+
+
+      <div class="card deals-product-container" ng-repeat="branch in branches"> <!--  -->
+
+
+        <div class="row middle-row-special">
+
+          <div class="col col-100" style="position: relative; text-align: center; color: white;" ui-sref="main.app.outlets({outletCode: branch.outlet})">    
+            <pre-img ratio="_5_3" ><img src="{{branch.pictures[0]}}" class="myDealsImg multi-bg " spinner-on-load></pre-img>
+            <div class="branchListStatusGreen" ng-if="branch.isOpen">Open Now</div>
+            <div class="branchListStatusRed" ng-if="!branch.isOpen">Closed for Delivery</div>
+            <div class="branchListName">{{branch.name}}, {{branch.city}}</div>                 
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </ion-content>
+
+  
+</ion-view>

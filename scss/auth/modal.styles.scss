@@ -1,0 +1,164 @@
+.modal-view.legal-view
+{
+	background-color: $main_red;
+
+	.legal-header
+	{
+		background-color: transparent !important;
+		background: transparent !important;
+		border: none !important;
+		background-size: 0px !important; // To remove bottom border on header
+		color: #FFF;
+
+		.buttons
+		{
+			position: absolute;
+	    top: 5px;
+	    right: 5px;
+	    bottom: 5px;
+		}
+
+		.close-button
+		{
+			color: #FFF;
+			font-size: 16px;
+		}
+	}
+
+	.copy-row
+	{
+		padding-top: 0px;
+
+		& > .col
+		{
+			padding-top: 0px;
+		}
+	}
+
+	.legal-title
+	{
+		text-align: center;
+		color: #FFF;
+		margin: 0px 5px 20px;
+		font-size: 22px;
+  	font-weight: 300;
+	}
+
+	.legal-content
+	{
+		margin: 0px 5px;
+		padding: 15px;
+		border-radius: 4px;
+		background-color: $auth-legal-bg;
+		color: $auth-color;
+		font-size: 12px;
+
+		.title
+		{
+			color: $main_red_dark;
+		}
+	}
+
+
+	.row
+	{
+		padding: 0px;
+		margin: 0px;
+
+		.col
+		{
+			padding: 0px;
+			margin: 0px;
+		}
+	}
+
+	.user-info-row
+	{
+		padding: 5px 30px 15px;
+
+		.pre-img
+		{
+			border-radius: 50%;
+			background-color: rgba($account-divider-color, .5);
+
+			.spinner svg
+	    {
+	      position: absolute;
+	    }
+		}
+
+		.profile-image
+		{
+			border-radius: 50%;
+			width: 100%;
+		}
+
+		.user-info-col
+		{
+			padding-left: 15px;
+
+			.user-welcome
+			{
+				color: $account-color;
+				margin: 0px;
+				font-size: 20px;
+				line-height: 26px;
+				font-weight: 400;
+			}
+
+			.user-email
+			{
+				color: $account-color;
+				margin: 0px;
+				font-size: 12px;
+				line-height: 18px;
+				font-weight: 400;
+			}
+		}
+	}
+
+	.user-data-row
+	{
+		padding: 0px 0px;
+		background: none;
+
+		.item.item-input
+		{
+			border: none;
+			padding: 5px 2px 0px 2px;
+
+			.input-label
+			{
+				color: $account-profile-data-color;
+				text-transform: uppercase;
+				font-weight: 300;
+				font-size: 11px;
+				padding-top: 5px;
+			}
+
+			input
+			{
+				background: none;
+				color: #e74c3c;
+				padding: 10px 0px;
+  				height: 28px;
+  				font-size: 14px;
+			}
+
+			myInput{
+				font-size: 24px;
+			}
+		}
+
+		& > .row
+		{
+			border-bottom: 1px solid rgba(238, 242, 245, 1);
+
+			&:last-child
+			{
+				border: none;
+			}
+		}
+	}
+
+}

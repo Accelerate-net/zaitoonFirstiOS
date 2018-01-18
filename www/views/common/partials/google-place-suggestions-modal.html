@@ -1,0 +1,20 @@
+    <ion-modal-view>
+
+      <ion-header-bar class="item-input-inset" style="background: #a8302c;">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input type="search" ng-model="search.query" placeholder="Search">
+        </label>
+        <button class="button button-small" style="background: none; width: 35px; float: right; margin: 0px; color: #eeeeee;" ng-click="close()">X</button>
+      </ion-header-bar>
+      <ion-content style="background: #c63a31">
+        <ion-list>
+          <ion-item ng-show="search.error" style="background: none; color: #ffd630; border-color: #bb2d28">
+            {{search.error}}
+          </ion-item>
+          <ion-item ng-show="!search.error" style="background: none; color: #FFF; border-color: #bb2d28" ng-repeat="suggestion in search.suggestions" ng-click="choosePlace(suggestion)">
+            {{suggestion.description}}
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-modal-view>

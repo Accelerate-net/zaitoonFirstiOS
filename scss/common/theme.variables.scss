@@ -1,0 +1,408 @@
+//Client Color Scheme
+$main_red: #c52031;
+$main_red_dark: #a71d2b;
+$main_red_darkest: #9f1a28;
+
+$main_grey : #162433;
+$main_grey_light : #242b33;
+
+$text_white_dull: #dce1ec;
+
+.veg{
+	color: #27ae60;
+	font-size: 80%;
+}
+
+.nveg{
+	color: #e74c3c;
+	font-size: 80%;
+}
+
+.myPrice{
+	color: #8c8f93;
+	font-size: 13px;
+	font-weight: 400;
+}
+
+.noColorButton{
+	.button{
+		background: none !important;
+		&:active{
+			background: none !important;
+		}
+		&:focus{
+			background: none !important;
+		}
+	}
+}
+
+.myMinus{
+	padding-right: 3px;
+}
+
+.myPlus{
+	padding-left: 3px;
+}
+
+.myTopPadding{
+	padding-top: 100px;
+}
+
+.myOTP{
+	color: #d06f76;
+	font-size: 18px;
+	text-align: center;
+	padding: 10px 0px;
+	border-bottom: 1px solid #902B2B;
+	margin-bottom: 20px;
+}
+
+.myMenuSubTitle{
+	padding: 10px 0px 0px 0px;
+	color: $main_red;
+	font-size: 28px;
+	font-weight: 300;
+}
+
+.filterIcon{
+	background: #c52031;
+	background-color: #c52031;
+	position: fixed;
+	right: 15px; bottom: 10px; z-index: 100;
+	width: 40px; height: 40px; border-radius: 40px;
+}
+
+.filterIcon :active{
+	opacity: 0.5;
+}
+
+.myHeaderRed{
+	background: $main_red_dark;
+	color: #FFF;
+}
+
+.myWhiteFont{
+	color: #FFF;
+	text-align: center;
+}
+
+.myDealsImg{
+	width: 100%;
+}
+
+.myNoPadding{
+	padding: 0px;
+}
+
+.myResetLink{
+	color: #1abc9c;
+	float: right;
+}
+
+.filterActive{
+	color: #e74c3c;
+}
+
+.nonActive{
+	color: #E5CCCC;
+}
+
+.myProceedButton{
+	background: #27ae60;
+	color: white;
+	padding: 10px;
+	vertical-align: top;
+	box-shadow: none;
+	border: none;
+}
+
+.button-bar > .button{
+  border: none;
+  color: #B8B8B8;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 16px;
+  padding-top: 3px;
+}
+//4F4F4F
+.button-positive-zaitoon{
+	background: #2ecc71;
+	.button{
+	color: #FFF;
+	}
+}
+
+.bookTable{
+	width: 100%;
+	background: #2980b9;
+	color: #FFF;
+	font-weight: bold;
+	letter-spacing: 2px;
+	padding: 10px;
+	text-align: center;
+}
+
+.bookTable:after{
+	background-color: #3498db;
+}
+
+
+.itemOutlet{
+	border: none;
+	padding: 10px 15px;
+	border-bottom: 1px solid #FFF5F3;
+	font-size: 14px;
+}
+
+.outletTitle{
+	margin: 0px;
+	margin-bottom: -6px;
+	text-transform: uppercase;
+	font-weight: 300;
+	text-align: left;
+	font-size: 11px;
+	letter-spacing: 1px;
+	color: #7f8c8d;
+	border-bottom: 1px solid #ecf0f1;
+}
+
+.couponButton{
+	color: #e74c3c;
+	text-transform: uppercase;
+	font-size: 15px;
+	font-weight: 500;
+	background-color: #faf7dc;
+	padding: 0px 10px 0px 15px;
+	height: 47px;
+	line-height: 47px;
+}
+
+.paymentRadio{
+	.item {
+					border: 1px solid $main_red;
+					color: #FFF;
+					margin-bottom: 5px;
+	}
+	.item-radio .item-content {
+	  color: $main_red;
+		padding: 8px 64px 8px 16px;
+	}
+
+	.radio-icon {
+		padding: 3px 5px;
+	}
+
+	.item-radio input:checked + .radio-content .item-content {
+			background: $main_red_dark;
+			color: #FFF;
+	}
+}
+
+.delivery-unavailable-popup{
+	background: rgba(0, 0, 0, 0.2);
+
+	.popup{
+		border-radius: 2px;
+	}
+}
+
+// Special Checkbox for Redeem Coins Part
+.regular-checkbox {
+	content: '\2714';
+	-webkit-appearance: none;
+	background: none;
+	border: 1px solid #c52031;
+	color: #A9A9A9;
+	//box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+	padding: 10px;
+	border-radius: 3px;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+}
+
+.regular-checkbox:active, .regular-checkbox:checked:active {
+	//box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.regular-checkbox:checked {
+	background-color: #a71d2b;
+	border: 1px solid #a71d2b;
+	//box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+	color: #FFF;
+}
+
+.regular-checkbox:checked:after {
+	content: '\2714';
+	font-size: 15px;
+	position: absolute;
+	top: 0px;
+	left: 4px;
+	color: #FFF;
+}
+//
+// .big-checkbox {
+// 	padding: 18px;
+// }
+//
+// .big-checkbox:checked:after {
+// 	font-size: 28px;
+// 	left: 6px;
+// }
+
+
+
+.rubber_stamp {
+  z-index : 10;
+  font-family: 'Vollkorn', serif;
+  font-size: 39px;
+  line-height: 45px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: red;
+  border: 7px solid red;
+  float: right;
+  padding: 10px 7px;
+  border-radius: 10px;
+  
+  opacity: 0.8;
+  -webkit-transform: rotate(-10deg);
+  -o-transform: rotate(-10deg);
+  -moz-transform: rotate(-10deg);
+  -ms-transform: rotate(-10deg);
+  position:absolute;
+  top:15%;
+  left: 5%;
+}
+.rubber_stamp::after {
+  position: absolute;
+  content: " ";
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  top: -10px;
+  left: -10px;
+  padding: 10px;
+  background: url(../img/common/noise.png) repeat;
+}
+
+/* For the Side Menu */
+
+$main-menu-bg: #a71d2b;
+$main-menu-color: #FFFFFF;
+
+// Menu - User image
+$menu-user-img-width: 10vw;
+$menu-user-img-ratio: 1 1;
+$pre-img-ratios: ();
+
+// Merge maps
+$pre-img-ratios: append($pre-img-ratios, $menu-user-img-ratio);
+
+
+ion-side-menu
+{
+	ion-content
+	{
+		background-color: #73141e;
+	}
+
+	ion-item.item
+	{
+		border-right:none;
+		border-left:none;
+		border-color: #670e17;
+
+		.item-content
+		{
+			background-color: darken($main-menu-bg, 12);
+
+			.icon:before
+			{
+				background-color: $main-menu-bg;
+				color: $main-menu-color;
+				border-radius: 50%;
+				font-size: 22px;
+				width: 32px;
+				height: 32px;
+				line-height: 32px;
+			}
+		}
+
+		.item-content.activated
+		{
+			background-color: lighten($main-menu-bg, 10);
+		}
+
+		.menu-text
+		{
+			color: #FFF;
+			font-weight:300;
+		}
+	}
+
+	ion-item.item:first-child
+	{
+		border-top:none;
+	}
+
+	ion-item.item:last-child
+	{
+		border-bottom:none;
+	}
+
+	.heading-item
+	{
+
+		.item-content
+		{
+			height: 120px;
+			padding-top: 45px;
+			padding-left: 115px;
+			background-color: darken($main-menu-bg, 10);
+			padding-bottom: 0px;
+		}
+
+		.user-image-container
+		{
+			width:90px;
+			position: absolute;
+		  top: 16px;
+		  left: 12px;
+
+			.user-image
+			{
+				border-radius: 50%;
+				padding: 8px;
+				border: 1px solid darken($main-menu-color, 40);
+				width: 100%;
+			}
+		}
+
+		.greeting
+		{
+			color: $main-menu-color;
+			font-weight:500;
+		}
+
+		.message
+		{
+			color: darken($main-menu-color, 40);
+		}
+	}
+}
+
+
+//Branch Listing
+.branchListName{
+	position: absolute; font-size: 32px; line-height: 36px; font-weight: bold; text-shadow: 2px 2px #4c4b4b; top: 50%; left: 50%; transform: translate(-50%, -50%);
+
+}
+
+.branchListStatusGreen{
+	position: absolute; top: 8px; right: 0; border-radius: 0; height: 24px; background: #149c6d; padding: 2px 8px; font-weight: bold; height: 24px;
+}
+
+.branchListStatusRed{
+	position: absolute; top: 8px; right: 0; border-radius: 0; height: 24px; padding: 2px 8px; font-font-weight: 400; height: 24px; background: #752713; color: #d48382;
+}

@@ -1,0 +1,67 @@
+<ion-view class="account-profile-view account-sub-view" cache-view="false">
+  <ion-content>
+
+   <div class="row user-info-row">
+      <div class="col col-25">
+         <pre-img ratio="_1_1">
+           <img class="profile-image" src="img/common/default_user.png" spinner-on-load/>
+         </pre-img>
+      </div>
+      <div class="col col-75 col-center user-info-col">
+        <h3 ng-if="!isEditMode" class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{customer.name}}</h3>
+        <h3 ng-if="isEditMode" class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{temp_name}}</h3>
+        <p class="user-email" style="font-weight: 300; color: #7d7d7d">Member since {{customer.memberSince}}</p>
+      </div>
+
+   </div>
+
+    <div class="user-data-row">
+      <div class="row" id="inputProfileName">
+        <label class="col item item-input item-stacked-label">
+          <span class="input-label">Name</span>
+          <input type="text" placeholder="Your Name" ng-model="customer.name" ng-disabled="!isEditMode">
+        </label>
+      </div>
+      <div class="row underlinedRow">
+        <label class="col item item-input item-stacked-label">
+          <span class="input-label">Mobile <span ng-if="customer.isVerified" style="color: #1abc9c" class="ion-checkmark-circled"></span></span>
+          <input type="text" placeholder="Mobile Number" ng-model="customer.mobile" ng-disabled="true">
+        </label>
+      </div>
+      <div class="row" id="inputProfileEmail">
+        <label class="col item item-input item-stacked-label">
+          <span class="input-label">Email</span>
+          <input type="email" placeholder="Your Email" ng-model="customer.email" ng-disabled="!isEditMode">
+        </label>
+      </div>
+
+      <div class="row" ng-if="isEditMode" style="margin-top: 10px;">
+        <button ng-click="cancelEdit()" class="button button-small" style="background: #7f8c8d; color: #FFF; margin-right: 5px">CANCEL</button>
+        <button  ng-click="saveEdit()" class="button button-small" style="background: #27ae60; color: #FFF">SAVE</button>
+      </div>
+
+      <div class="row" ng-if="!isEditMode" style="margin: 0px;">
+        <span ng-if="!isEditMode" ng-click="editProfile()" style="color: #A2A1A1; padding: 0px; margin: 0px; font-size: 11px" class="icon ion-edit"> EDIT PROFILE</span>
+      </div>
+
+
+
+
+    </div>
+    <!-- <h3 class="account-sub-title" ng-if="addressCount" style="color: #34495e; text-align: left; padding-left: 20px;">Manage Saved Addresses</h3> -->
+    <div ng-if="addressCount" class="address-chooser" ng-click="openAddressesPopover($event)">
+      <button class="button button-block icon-right addresses-popover-button" ng-class="{'ion-chevron-up': addresses_popover.isShown(), 'ion-chevron-down' : !addresses_popover.isShown()}">
+        {{'All Saved Addresses'}}
+      </button>
+    </div>
+
+    <div class="row logout-terms-row">
+      <div class="col">
+        <a class="button button-block button-clear logout-button" ng-click="logout()">Logout</a>
+      </div>
+      <div class="col">
+        <a class="button button-block button-clear logout-button" ng-click="showHelp()">Help</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,22 @@
+<ion-popover-view class="address-chooser-popover" style="background: #FFF;" ng-init="total_items = cities.length" ng-class="{'contains-{{total_items}}-items' : true, 'contains-more-than-6-items' : (total_items > 5)}">
+
+  <ion-content has-bouncing="false">
+    <ion-scroll class="addresses-scroller" direction="y">
+      <div class="list addresses-list">
+
+        <ion-list>
+          <ion-item ng-repeat="city in cities" ng-click="setCity(city.name)" style="background: none; border: 0px; border-bottom: 1px solid #FAFBEB; color: #e74c3c;">
+            {{city.name}}
+          </ion-item>
+
+          <p ng-if="cities.length == 0" style="color: #c63a31; font-size: 16px; font-weight: 300; padding: 20px; text-align: center;">Unable to fetch City List<br><button class="button button-small" style="background: none; border: 1px solid #c63a31; color:#c63a31; margin-top: 10px" ng-click="reloadCityList()">Fetch Again</button></p>
+        </ion-list>
+
+      </div>
+    </ion-scroll>
+
+  </ion-content>
+</ion-popover-view>
+
+
+        

@@ -1,0 +1,70 @@
+<ion-modal-view class="modal-view legal-view">
+	<ion-header-bar class="legal-header">
+		<div class="buttons">
+      <button class="button button-clear close-button" ng-click="help_modal.hide()">Close</button>
+    </div>
+	</ion-header-bar>
+	<ion-content>
+    <div class="row copy-row">
+      <div class="col">
+				<h2 class="legal-title">Zaitoon Customer Support</h2>
+        <div class="legal-content" style="color: #2c3e50">
+    			<p>For refund requests, the best suggested option is to use this feature. We will revert in less than 24 hours. For any other immediate help, call our outlet managers, rest assured! You can find the details from www.zaitoon.online<br><br>Alternatively, you can contact us at care@zaitoon.online for any queries or concerns.</p>
+          <hr>
+          <br>
+          <h5 class="title" style="color: #c0392b">Submit a Query/Refund Request</h5>
+
+          <div class="user-data-row">
+
+            <div class="paymentRadio" style="padding: 0px 0px" ng-if="1">
+              <ion-list>
+                <ion-radio ng-model="queryType" ng-value="'GENERAL'" ng-click="setType('GENERAL')">General Query</ion-radio>
+                <ion-radio ng-model="queryType" ng-value="'REFUND'" ng-click="setType('REFUND')">Refund Request</ion-radio>
+              </ion-list>
+            </div>
+
+            <div class="row">
+              <label class="col item item-input item-stacked-label">
+                <span class="input-label">COMMENTS</span>
+                <textarea placeholder="Your Comments" ng-model="myquery.comment" style="border-radius: 0px; resize: none; border: 1px solid #c0392b; color: #c0392b; padding: 8px 6px" rows="5"></textarea>
+              </label>
+            </div>
+            <div class="row" ng-if="queryType == 'REFUND'">
+              <label class="col item item-input item-stacked-label">
+                <span class="input-label">Payment Reference ID</span>
+                <input type="text" placeholder="Payment ID" style="border-radius: 0px; border: 1px solid #c0392b; color: #c0392b; padding: 2px 6px " ng-model="myquery.reference">
+              </label>
+            </div>
+            <div class="row">
+              <label class="col item item-input item-stacked-label">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Your Name" ng-model="myquery.name">
+              </label>
+            </div>
+            <div class="row">
+              <label class="col item item-input item-stacked-label">
+                <span class="input-label">Mobile</span>
+                <input type="text" placeholder="Mobile Number" ng-model="myquery.mobile">
+              </label>
+            </div>
+            <div class="row">
+              <label class="col item item-input item-stacked-label">
+                <span class="input-label">Email</span>
+                <input type="email" placeholder="Your Email" ng-model="myquery.email">
+              </label>
+            </div>
+
+            <div class="row" ng-if="1" style="margin-top: 10px;">
+              <button ng-click="submitQuery()" class="button button-balanced button-block" style="border-radius: 0px">Submit</button>
+            </div>
+            <p ng-if="submitError != ''" style="padding: 5px 0px 0px 0px; color: red; text-align: center">{{submitError}}</p>
+
+          </div>
+
+
+
+    		</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-modal-view>

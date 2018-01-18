@@ -1,0 +1,65 @@
+.tabbed-navigation
+{
+	// Override android default styles
+	&.tabs-striped
+	{
+	  .tabs
+		{
+	    border: none;
+			padding: 0px;
+	  }
+	  .tab-item
+		{
+	    &.tab-item-active,
+	    &.active,
+	    &.activated {
+	      margin: 0px;
+	      border: none;
+	    }
+	  }
+	}
+
+	.tabs
+	{
+		padding: 0px;
+		@include tab-style($main_red_dark, $main_red_dark, $navigation-tabs-text);
+		background-image: none !important;
+
+		.tab-item-active
+		{
+			background-color: $main_red_darkest;
+		}
+
+		.tab-title
+		{
+			text-transform: uppercase;
+			font-weight: 500;
+		}
+
+		.tab-item
+		{
+			.icon
+			{
+				width: 24px;
+				height: 22px;
+				background-size: 100% 100%;
+				margin: 8px auto 3px;
+
+				&.menu-icon
+				{
+					background-image: url('../img/common/tabs-menu.png');
+				}
+
+				&.search-icon
+				{
+					background-image: url('../img/common/tabs-explore.png');
+				}
+
+				&.account-icon
+				{
+					background-image: url('../img/common/tabs-account.png');
+				}
+			}
+		}
+	}
+}

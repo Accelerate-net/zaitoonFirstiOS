@@ -1,0 +1,19 @@
+<ion-popover-view class="address-chooser-popover" style="background: #FFF; border: 1px solid #c63a31;" ng-class="{'contains-{{ outletListSize }}-items' : true, 'contains-more-than-6-items' : (outletListSize > 5)}">
+
+  <ion-content has-bouncing="false">
+    <ion-scroll class="addresses-scroller" direction="y">
+      <div class="list addresses-list">
+
+        <ion-list>
+          <ion-item ng-repeat="outlet in outletList" ng-click="setOutlet(outlet)" style="background: none; border: 0px; border-bottom: 1px solid #FAFBEB; color: #e74c3c;">
+            {{outlet.name}}
+          </ion-item>
+
+          <p ng-if="outletList.length == 0" style="color: #c63a31; font-size: 16px; font-weight: 300; padding: 20px; text-align: center;">Sorry. No outlets are accepting Takeaway Orders currently.</p>
+        </ion-list>
+
+      </div>
+    </ion-scroll>
+
+  </ion-content>
+</ion-popover-view>

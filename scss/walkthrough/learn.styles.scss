@@ -1,0 +1,161 @@
+.learn-view
+{
+	background-color: $main_red;
+
+	.learn-header
+	{
+		background-color: transparent !important;
+		background: transparent !important;
+		border: none !important;
+		background-size: 0px !important; // To remove bottom border on header
+
+		.buttons
+		{
+			position: absolute;
+	    top: 5px;
+	    right: 5px;
+	    bottom: 5px;
+		}
+
+		.skip-button
+		{
+			color: $learn-color;
+			font-size: 16px;
+		}
+	}
+
+	.learn-content
+	{
+		& > .scroll
+		{
+			height: 100%;
+		}
+	}
+
+	.slides-row
+	{
+		@include calc(height, "100% - #{($learn-actions-height)}");
+		padding: 0px;
+
+		& > .col
+		{
+			padding: 0px;
+			height: 100%;
+		}
+
+		.learn-slider
+		{
+			height: 100%;
+
+			&.hide-pager .slider-pager
+			{
+				display: none;
+			}
+		}
+
+		.slider-pager
+		{
+			bottom: 1px;
+
+			.slider-pager-page
+			{
+				color: $learn-color;
+			  margin: 0px 6px;
+			}
+		}
+	}
+
+	.actions-row
+	{
+		height: $learn-actions-height;
+		padding: 0px;
+		margin: 0px;
+
+		& > .col
+		{
+			padding: 0px;
+		}
+
+		.action-button
+		{
+			margin: 0px;
+			height: $learn-actions-height;
+			line-height: $learn-actions-height - 5px;
+			font-size: 26px;
+
+			@include button-style($main_red_dark, $main_red_dark, $main_red_darkest, $main_red_darkest, $learn-action-button-text);
+
+			&::after
+			{
+				bottom: 0px;
+			}
+		}
+	}
+
+	.learn-sub-view.slide-learn
+	{
+		.images-row
+		{
+			padding: 0px;
+
+			& > .col
+			{
+				padding: 0px;
+			}
+
+			.pre-img
+			{
+				background-color: transparent;
+			}
+			.spinner-on-load
+			{
+			  color: $learn-color;
+			}
+			ion-spinner.spinner-on-load
+			{
+			  stroke: $learn-color;
+			}
+
+			.illustration-container
+			{
+				width: 100%;
+				margin-top: 60px;
+
+				.illustration-image
+			    {
+			      width: 40%;
+			    }
+			}
+		}
+
+		.copy-row
+		{
+			padding: 0px;
+
+			& > .col
+			{
+				padding: 0px;
+			}
+
+			.welcome-title
+			{
+				font-size: 2em;
+				font-weight: 300;
+				margin: 25px 0px 0px;
+				color: $text_white_dull;
+				text-align: center;
+			}
+
+			.welcome-paragraph
+			{
+				font-weight: 200;
+				color: $text_white_dull;
+				text-align: center;
+				margin: 30px 10% 0px;
+				font-size: 1.5em;
+				line-height: 28px;
+			}
+		}
+	}
+
+}

@@ -1,0 +1,76 @@
+<ion-view class="shopping-cart-view" cache-view="false">
+  <ion-header-bar class="shopping-cart-header">
+
+    <button class="button button-clear" style="width: 35px" ui-sref="main.app.passes()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
+    <h1 class="title" style="padding-left: 10px">My Passes</h1>
+    <!-- " -->
+  </ion-header-bar>
+  <ion-content class="shopping-cart-content" has-bouncing="false">
+
+    <div ng-if="products.length > 0">
+
+<div class="products-in-cart-row">
+
+    <div class="shopping-cart-view">
+    <ul class="list checkout-products">
+      <li class="item checkout-product" ng-repeat="product in products track by $index" ng-style="getItemStyle(product)">
+        
+		    <div class="row" style="margin-bottom: 10px" ng-if="product.isImageAvailable == 1">			
+              <div class="col col-center">
+			  <div class="rubber_stamp" ng-if="product.status != 0">Redeemed</div>
+			  <pre-img ratio="_5_3">
+                 <img ng-src="{{product.url}}" class="myDealsImg" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" spinner-on-load>
+				 <!--<img class="product-image" ng-src="{{ product.image }}" > -->
+              </pre-img>
+			  			  
+			  </div>
+            </div>		
+
+		
+		<div class="row">
+	
+          <div class="col col-75 col-center">			
+            <div class="row">	
+			              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-center">
+
+                <span class="product-name item-text-wrap" style="color: #ffc900; font-weight: 400;">{{product.name}}</span>
+              </div>
+            </div>
+            <div class="row" ng-if="product.variant != ''">
+              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-90 col-center">
+                <p style="font-size: 10px; color: #ecebeb; padding-top: 3px">Choice: <tag style="color: #FFF;">{{product.variant}}</tag></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-10 col-center">
+              </div>
+              <div class="col col-90 col-center">
+                <p style="font-size: 10px; color: #ecebeb; padding-top: 3px"><i class="fa fa-inr"></i> {{product.price}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col col-25 col-center">
+            <div class="row">
+                  <a class="button button-small" ng-click="viewthis(product.uniquePass)"  style="color: #FFF; font-size: 14px; background-color:#4b4f52; border-radius: 0; ">{{product.uniquePass}}</a>
+            </div>
+          </div>
+
+        </div>
+      </li>
+    </ul>
+    </div>
+
+
+
+      </div>
+    </div>
+	
+  </ion-content>
+
+
+  
+</ion-view>

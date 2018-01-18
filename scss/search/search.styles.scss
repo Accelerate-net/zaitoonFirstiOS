@@ -1,0 +1,114 @@
+.search-view
+{
+	background-color: $search-bg;
+
+	.search-header
+	{
+		background-color: #27ae60 !important;
+		background: #2c3e50 !important;
+		border: none !important;
+		background-size: 0px !important; // To remove bottom border on header
+
+		.row
+		{
+			padding: 0px;
+
+			.col
+			{
+				padding: 0px;
+			}
+		}
+
+		.search-row
+		{
+			padding: 3px 10px;
+
+			.search-label
+			{
+				background: none;
+				color: #FFF;
+			  	border-radius: 0px;
+			  	border-bottom: 1px solid #FFF;
+
+				.icon.ion-ios-search
+				{
+					&::before
+					{
+						color: #FFF;
+						font-size: 24px;
+					}
+				}
+
+				input
+				{
+					color: #FFF;
+					font-size: 16px;
+  					font-weight: 300;
+				}
+			}
+
+			.cancel-button
+			{
+				color: $search-header-color;
+				font-weight: 500;
+				float: right;
+			}
+		}
+	}
+
+	.search-header-filter
+	{
+		background-color: #27ae60 !important;
+		background: #27ae60 !important;
+		border: none !important;
+		background-size: 0px !important; // To remove bottom border on header
+
+		.row
+		{
+			padding: 0px;
+
+			.col
+			{
+				padding: 0px;
+			}
+		}
+
+		.search-row-filter
+		{
+			padding: 3px 10px;
+
+			.search-label
+			{
+				background: none;
+				color: #FFF;
+			  	border-radius: 0px;
+			  	border-bottom: 1px solid #FFF;
+
+				.icon.ion-ios-search
+				{
+					&::before
+					{
+						color: #FFF;
+						font-size: 24px;
+					}
+				}
+
+				input
+				{
+					color: #FFF;
+					font-size: 16px;
+  					font-weight: 300;
+				}
+			}
+
+			.cancel-button
+			{
+				color: $search-header-color;
+				font-weight: 500;
+				float: right;
+			}
+		}
+	}
+
+
+}
