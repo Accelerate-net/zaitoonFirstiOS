@@ -1,7 +1,7 @@
 angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
-    .controller('FeedCtrl', function($ionicLoading, locationChangeRouteTrackerService, $ionicModal, $scope, $http, $ionicPopup, $rootScope, $state, $ionicScrollDelegate, $ionicSideMenuDelegate, ShoppingCartService) {
+    .controller('FeedCtrl', function($ionicLoading, outletService, locationChangeRouteTrackerService, $ionicModal, $scope, $http, $ionicPopup, $rootScope, $state, $ionicScrollDelegate, $ionicSideMenuDelegate, ShoppingCartService) {
     
 
         $scope.getProductsInCart = function() {
@@ -23,6 +23,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             }
         }
 
+        $scope.selectedOutlet = outletService.getInfo();
 
         $scope.navToggled = false;
 
@@ -189,7 +190,17 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
     })
 
 
-    .controller('featureCtrl', function($scope, $http, $ionicLoading, ShoppingCartService, $ionicPopup, menuService) {
+    .controller('featureCtrl', function($scope, outletService, $http, $ionicLoading, ShoppingCartService, $ionicPopup, menuService) {
+
+
+
+        $scope.outletSelection = outletService.getInfo();
+        if ($scope.outletSelection.outlet == "") {
+            $myOutlet = "VELACHERY";
+        } else {
+            $myOutlet = $scope.outletSelection.outlet;
+        }
+
 
 
         $scope.addFeature = function(item) {
@@ -269,6 +280,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         var data = {};
         data.cuisine = temp_cusine;
+        data.outlet = $myOutlet;
         $http({
                 method: 'POST',
                 url: 'https://www.zaitoon.online/services/featuremenu.php',

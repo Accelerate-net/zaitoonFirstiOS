@@ -1,6 +1,6 @@
 angular.module('landing.controllers', [])
 
-    .controller('welcomeCtrl', function($timeout, locationChangeRouteTrackerService, userLocationService, menuService, outletService, outletWarningStatusService, $scope, $http, $rootScope, $state, $ionicPopover, $ionicPopup, $ionicLoading) {
+    .controller('welcomeCtrl', function($timeout, $cordovaGeolocation, locationChangeRouteTrackerService, userLocationService, menuService, outletService, outletWarningStatusService, $scope, $http, $rootScope, $state, $ionicPopover, $ionicPopup, $ionicLoading) {
 
         //If already logged in?
         if (!_.isUndefined(window.localStorage.user) && window.localStorage.user != "") {
@@ -70,12 +70,75 @@ angular.module('landing.controllers', [])
             $scope.isLocationSet = true;
 
 
+        /* To tweak already set location */
         $scope.currentLocation = window.localStorage.location;
+        $scope.location = {};
+        $scope.location.formatted_address = $scope.currentLocation;
 
         /* NEW GOOGLE PLACE BASED OUTLET SELECTION */
         $scope.setGoogleLocation = function() {
             var coords = userLocationService.getCoords();
             $rootScope.getGoogleOutletSuggestion(coords.lat, coords.lng);
+        }
+
+        /* Try to fetch geo location from device */
+        $scope.getGooglePlaceName = function(lat, lng){
+
+            //LOADING
+            $ionicLoading.show({
+                template: '<ion-spinner></ion-spinner>'
+            });
+
+
+            var geocoder = new google.maps.Geocoder;
+            var latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+            geocoder.geocode({'location': latlng}, function(results, status) {
+            
+              $ionicLoading.hide();
+
+              if (status === 'OK') {
+                if (results[0]) {
+                    userLocationService.setCoords(lat, lng);
+                    userLocationService.setText(results[0].formatted_address);
+                    $scope.location.formatted_address = results[0].formatted_address;  
+                    $scope.location.place_id = results[0].place_id; 
+
+                } else {
+                    $ionicLoading.show({
+                        template: 'Error occured while fetching your location. Enter location manually.',
+                        duration: 3000
+                    });    
+                }
+              } else {
+                    $ionicLoading.show({
+                        template: 'Error occured while fetching your location. Enter location manually.',
+                        duration: 3000
+                    });    
+              }
+            });
+        }
+
+        $scope.fetchGeoCoordinates = function(){
+            
+            //LOADING
+            $ionicLoading.show({
+                template: '<ion-spinner></ion-spinner>'
+            });
+
+              var posOptions = {timeout: 10000, enableHighAccuracy: false};
+              $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                  $ionicLoading.hide();
+                  $scope.getGooglePlaceName(position.coords.latitude, position.coords.longitude);
+                }, function(err) {
+                    $ionicLoading.hide();
+                    $ionicLoading.show({
+                        template: 'Error occured while fetching your location. Enter location manually.',
+                        duration: 3000
+                    });                    
+                });
         }
 
 
@@ -107,7 +170,7 @@ angular.module('landing.controllers', [])
                             info.outlet = response.data.response.outlet;
                             info.isSpecial = response.data.response.isSpecial;
                             info.city = response.data.response.city;
-                            info.location = response.data.response.location;
+                            info.location = userLocationService.getText();
                             info.locationCode = response.data.response.locationCode;
                             info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
                             info.isOpen = response.data.response.isOpen;
@@ -153,7 +216,6 @@ angular.module('landing.controllers', [])
                             $ionicPopup.show({
                                 title: "Delivery Not Available",
                                 subTitle: 'Selected area is beyond our delivering area. You can place only Take Away orders.',
-                                cssClass: 'delivery-unavailable-popup',
                                 scope: $scope,
                                 buttons: [{
                                         text: 'Cancel',
@@ -181,7 +243,7 @@ angular.module('landing.controllers', [])
                                             info.outlet = response.data.response.outlet;
                                             info.isSpecial = response.data.response.isSpecial;
                                             info.city = response.data.response.city;
-                                            info.location = response.data.response.location;
+                                            info.location = userLocationService.getText();
                                             info.locationCode = response.data.response.locationCode;
                                             info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
                                             info.isOpen = response.data.response.isOpen;
@@ -258,7 +320,7 @@ angular.module('landing.controllers', [])
                         info.outlet = response.data.response.outlet;
                         info.isSpecial = response.data.response.isSpecial;
                         info.city = response.data.response.city;
-                        info.location = response.data.response.location;
+                        info.location = window.localStorage.location;
                         info.locationCode = response.data.response.locationCode;
                         info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
                         info.isOpen = response.data.response.isOpen;

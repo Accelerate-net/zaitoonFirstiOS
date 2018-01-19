@@ -1,7 +1,7 @@
 <ion-view class="checkout-view" cache-view="false">
   <ion-header-bar class="checkout-header">
     <button class="button button-clear" style="width: 35px;" ng-click="cancel()"><img src="img/common/back.png" width="20px" style="position: absolute; right: 5px; top: 5px; left: 5px;"></button>
-    <button class="button button-clear" style="padding: 0px 30px 0px 50px; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 14px;" ng-if="checkoutMode == 'delivery'" width="80px" ng-click="changeLocation()"><img src="img/common/location.png" width="20px" style="position: absolute; right: 5px; top: 5px;">{{outletSelection['location']}}, {{outletSelection['city']}}</button>
+    <button class="button button-clear" style="padding: 0px 30px 0px 50px; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 14px; width: 75%" ng-if="checkoutMode == 'delivery'" width="80px" ng-click="changeLocation()"><img src="img/common/location.png" width="20px" style="position: absolute; right: 5px; top: 5px;">{{outletSelection['location']}}</button>
   </ion-header-bar>
   <ion-content has-bouncing="false" class="checkout-content">
 

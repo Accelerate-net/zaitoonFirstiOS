@@ -35,7 +35,8 @@
       </div>
 
       <div ng-if="!isCombosEmpty" class="card deals-product-container" ng-repeat="combo in combos">
-        <div class="row row-center top-row" style="border: none; background: #c52031">
+
+        <div class="row row-center top-row" ng-if="!combo.isImageAvailable" style="border: none; background: #c52031">
           <div class="col col-100 shop-col">
             <button class="button shop-button-combo" style="background: none; color: #FFF; float: left">
               COMBO OFFER
@@ -49,8 +50,10 @@
           </div>
         </div>
 
-        <div class="row" ng-if="combo.isImageAvailable">
+        <div class="row" ng-if="combo.isImageAvailable" style="position: relative; text-align: center; color: white;">
           <img width="100%" height="100%" src="{{combo.url}}">
+          <div class="dealsNoAddButton" ng-if="!combo.isAvailable">Out of Stock</div>
+          <div class="dealsAddButton" ng-if="combo.isAvailable" ng-click="addComboToCart(combo)">Add to Cart</div> 
         </div>
 
         <div class="row middle-row">

@@ -31,7 +31,8 @@
             <pre-img ratio="_5_3" ><img src="{{branch.pictures[0]}}" class="myDealsImg multi-bg " spinner-on-load></pre-img>
             <div class="branchListStatusGreen" ng-if="branch.isOpen">Open Now</div>
             <div class="branchListStatusRed" ng-if="!branch.isOpen">Closed for Delivery</div>
-            <div class="branchListName">{{branch.name}}, {{branch.city}}</div>                 
+            <div class="branchListName">{{branch.name}}, {{branch.city}}</div>  
+            <div class="branchListDistance" ng-if="branch.isDistance">{{formatDistance(branch.distance)}} away</div>                 
           </div>
 
         </div>

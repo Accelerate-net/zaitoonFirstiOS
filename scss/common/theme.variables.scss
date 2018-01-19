@@ -392,10 +392,9 @@ ion-side-menu
 	}
 }
 
-
 //Branch Listing
 .branchListName{
-	position: absolute; font-size: 32px; line-height: 36px; font-weight: bold; text-shadow: 2px 2px #4c4b4b; top: 50%; left: 50%; transform: translate(-50%, -50%);
+	position: absolute; font-size: 32px; line-height: 36px; font-weight: bold; text-shadow: 2px 2px #2d2929; top: 50%; left: 50%; transform: translate(-50%, -50%);
 
 }
 
@@ -405,4 +404,17 @@ ion-side-menu
 
 .branchListStatusRed{
 	position: absolute; top: 8px; right: 0; border-radius: 0; height: 24px; padding: 2px 8px; font-font-weight: 400; height: 24px; background: #752713; color: #d48382;
+}
+
+.branchListDistance{
+	position: absolute; top: 8px; left: 8px; font-font-weight: 400;  color: #FFF; padding: 0 10px; background: none; font-weight: bold; text-shadow: 1px 1px #2d2929;
+}
+
+//Deals Page
+.dealsAddButton{
+	position: absolute; top: 8px; right: 8px; background: rgba(89, 193, 133, 0.8); color: #FFF;  border-radius: 8px; padding: 5px 8px; font-weight: bold; height: 32px;	
+}
+
+.dealsNoAddButton{
+	position: absolute; top: 8px; right: 8px; background: rgba(86, 86, 86, 0.8); color: #b7b7b7; border-radius: 8px; padding: 5px 8px; font-weight: bold; height: 32px;	
 }
