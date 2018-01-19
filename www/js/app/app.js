@@ -60,7 +60,6 @@ angular.module('zaitoonFirst', [
 
         'underscore',
         'angularMoment',
-        'ngMap',
         'ngRangeSlider',
         'ionic-native-transitions'
     ])
@@ -83,7 +82,7 @@ angular.module('zaitoonFirst', [
             }
         });
 
-        /*
+    
         $ionicPlatform.ready(function() {
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -102,23 +101,7 @@ angular.module('zaitoonFirst', [
 
             $rootScope.$apply();
         });
-        */
 
-
-
-            document.addEventListener('deviceready', function () {
-                if (window.cordova && window.cordova.plugins.Keyboard) {
-                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                    cordova.plugins.Keyboard.disableScroll(true);
-
-                }
-                if (window.StatusBar) {
-                    // org.apache.cordova.statusbar required
-                    StatusBar.styleDefault();
-                }
-
-                amMoment.changeLocale('en-gb');
-            }, false);
 
 
     })

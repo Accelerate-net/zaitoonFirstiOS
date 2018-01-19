@@ -42,20 +42,22 @@
 
       <div class="col" style="padding: 0px 20px">
       <p style="margin: 0; font-size: 10px; color: #ecbfc4; letter-spacing: 2px; text-align: center;">
-        <tag ng-if="currentLocation && !location.formatted_address">YOUR SAVED LOCATION</tag>
-        <tag ng-if="!currentLocation && !location.formatted_address">SET YOUR LOCATION</tag>
-        <tag ng-if="location.formatted_address">SAVE NEW LOCATION</tag>
+        <tag ng-if="currentLocation && !location.place_id">YOUR SAVED LOCATION</tag>
+        <tag ng-if="!currentLocation && !location.place_id">SET YOUR LOCATION</tag>
+        <tag ng-if="location.place_id">SAVE NEW LOCATION</tag>
       </p>
 
-      <input type="text" style="background: none; width: 100%; border-radius: 0; border-bottom: 1px solid #ab9fa0; text-align: center; font-size: 16px; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" placeholder="Type in your location here..." location-suggestion location="location" ng-model="location.formatted_address || currentLocation">
+        <input type="text" style="background: none; width: 100%; border-radius: 0; border-bottom: 1px solid #ab9fa0; text-align: center; font-size: 16px; color: #FFF; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;" placeholder="Type in your location here..." location-suggestion location="location" ng-model="location.formatted_address">
 
         <div class="alternative-actions">
           <a class="action-link button button-small button-clear" style="float: left;
     color: #ab9a9c;" ui-sref="main.app.feed.arabian()">Cancel</a>
           <a class="action-link button button-small button-clear" style="float: right;
-    color: #fefbfb;" ng-if="location.formatted_address" ng-click="setGoogleLocation(myLocation)">Confirm</a>
+    color: #fefbfb;" ng-if="location.place_id" ng-click="setGoogleLocation(myLocation)">Confirm</a>
+          <a class="action-link button button-small button-clear" style="color: #ffbc19; float: right;" ng-click="fetchGeoCoordinates()"><i class="fa fa-location-arrow"></i> Locate Me</a>    
         </div>
       </div>
+      
 
     </div>
 

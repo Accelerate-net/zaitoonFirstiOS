@@ -1,7 +1,6 @@
 angular.module('outlet.controllers', [])
 
 
-
 .controller('BranchCtrl', function($ionicLoading, ConnectivityMonitor, $rootScope, $scope, $http, $ionicPopup, $state) {
 
 
@@ -17,12 +16,36 @@ angular.module('outlet.controllers', [])
 		$state.go('main.app.feed.arabian');
   	};
 
+
+  	$scope.formatDistance = function(val){
+  		if(val < 1){
+  			return val*1000+' meters';
+  		}
+  		else{
+  			return val+' Kms';
+  		}
+  	}
+
+  		if (!_.isUndefined(window.localStorage.locationCode) && window.localStorage.locationCode != "") {
+  	        var ex_coords = window.localStorage.locationCode;
+            var saved_coords = ex_coords.split('_');
+
+			//Get all the outlets
+			$http.get('https://www.zaitoon.online/services/fetchbranches.php?lat='+saved_coords[0]+'&lng='+saved_coords[1])
+			.then(function(response){
+						$scope.branches = response.data.response;
+
+						console.log($scope.branches)
+			});
+		}
+		else{
+
 			//Get all the outlets
 			$http.get('https://www.zaitoon.online/services/fetchbranches.php')
 			.then(function(response){
 						$scope.branches = response.data.response;
-						console.log($scope.branches)
-			});
+			});			
+		}
 
 })
 
@@ -303,18 +326,36 @@ angular.module('outlet.controllers', [])
 	$scope.info = outlet;
 
 
-	$scope.$on('mapInitialized', function(event, map) {
-		// If we want to access the map in the future
-		$scope.map = map;
-	});
+	/* Initialize Google Maps */
+
+	var latLng = new google.maps.LatLng($scope.info.lat, $scope.info.lng);
+
+	var mapOptions = {
+	      center: latLng,
+	      zoom: 15,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	 
+	$scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);		
+
+	google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+	 
+	  var marker = new google.maps.Marker({
+	      map: $scope.map,
+	      animation: google.maps.Animation.DROP,
+	      icon: 'https://zaitoon.online/icons/zaitoon_marker.png',
+	      position: latLng
+	  });     
+	 
+	});	
+
 	
-  $scope.launchNavigator = function(latitude, longitude) {
-    var destination = [latitude, longitude];
-	var start = "Trento";
-    $cordovaLaunchNavigator.navigate(destination, start).then(function() {
-      console.log("Navigator launched");
-    });
-  };
+	  $scope.launchNavigator = function(latitude, longitude) {
+	    var destination = [latitude, longitude];
+		var start = "Chennai";
+	    $cordovaLaunchNavigator.navigate(destination, start).then(function() {
+	    });
+	  };
 		
 })
 

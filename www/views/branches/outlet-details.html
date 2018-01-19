@@ -6,7 +6,7 @@
         <ion-slide>
           <div class="image-container" multi-bg="[info.pictures[0]]">
             <div class="product-illustration-container">
-            <h1 style="color: #FFF; text-align: center">Zaitoon {{info.name}}</h1>
+            <h1 style="color: #FFF; text-align: center; padding: 0px 15px">Zaitoon {{info.name}}</h1>
             </div>
           </div>
         </ion-slide>
@@ -15,12 +15,12 @@
         </ion-slide>
       </ion-slide-box>
     </div>
-	
+  
     <div class="row all-reviews-row" style="margin-top: 5px">
       <div class="col">
 
       </div>
-    </div>	
+    </div>  
 
     <div class="row brief-info-row">
       <div class="col">
@@ -28,13 +28,13 @@
         <h5 class="product-style" style="color: #a71d2b; font-weight: 300">{{info.line1}}</h5>
         <h5 class="product-style" style="color: #a71d2b; font-weight: 300">{{info.line2}}</h5>
         <h5 class="product-style" style="color: #a71d2b; font-weight: 300">{{info.city}}</h5>
-		<h5 class="product-style" style="color: #16a085; font-weight: 300">Open Hours: <b>{{info.openHours}}</b></h5>
-		<br>
+    <h5 class="product-style" style="color: #16a085; font-weight: 300">Open Hours: <b>{{info.openHours}}</b></h5>
+    <br>
         <a style="font-size:18px; color: #a71d2b; text-decoration: none;" href="tel:{{info.mobile}}" >
           <i class="fa fa-phone"></i> {{info.mobile}}
-        </a>			
+        </a>      
       </div>
-	  
+    
   
     </div>
 
@@ -43,28 +43,23 @@
         <p style="font-weight: 300"></p>
       </div>
     </div>
-	
-
-
-	
+  
+  
     <div class="row address-map-row">
       <div class="col">
-        <div class="map-wrapper" data-tap-disabled="true">
-          <map center="{{info.lat}},{{info.lng}}" zoom="15" map-type-control="false" street-view-control="false" zoom-control="true" zoom-control-options="{style:'SMALL'}">
-            <marker position="{{info.lat}},{{info.lng}}" title="Zaitoon {{info.name}}" visible="true"></marker>
-          </map>
+        <div class="map-wrapper" id="map" data-tap-disabled="true">
         </div>
       </div>
     </div>
 
-	<div class="row write-review-row" style="padding: 0">
-    	<div class="col">
-    		<button class="button new-review-button" style="background: #47a085; font-size: 16px; z-index: 100; position: relative; top: -45px; left: 10px;" ng-click="launchNavigator(info.lat, info. lng)">
-    			<i class="fa fa-automobile"></i> Navigate
-    		</button>
-    	</div>
+  <div class="row write-review-row" style="padding: 0">
+      <div class="col">
+        <button class="button new-review-button" style="background: #47a085; font-size: 16px; z-index: 100; position: relative; top: -45px; left: 10px;" ng-click="launchNavigator(info.lat, info. lng)">
+          <i class="fa fa-automobile"></i> Navigate
+        </button>
+      </div>
     </div>
-	
+  
   </ion-content>
   
     <div class="row write-review-row" style="padding: 0">
@@ -72,15 +67,15 @@
         <button class="button button-block new-review-button" ng-if="!info.isReservationAllowed" style="border-radius: 0; position: fixed; bottom: 0; height: 60px;">
           Table reservation not available
         </button>
-		
+    
         <button class="button button-block new-review-button" ng-if="info.isReservationAllowed" style="border-radius: 0; position: fixed; bottom: 0; height: 60px; background: #60cd71" ng-click="bookTable(info.outlet)">
           BOOK A TABLE
         </button>
-		
+    
       </div>
     </div>
 
 
 
-	
+  
 </ion-view>

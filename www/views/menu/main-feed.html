@@ -1,21 +1,29 @@
       <ion-side-menus class="feed-view" cache-view="true">
          <ion-side-menu-content>
 <ion-header-bar class="feed-header">
+
+
     <div class="buttons" style="position: absolute; top: 5px; left: 5px; bottom: 5px;">
-      <button class="button button-clear cart-button" style="margin: 0; color: #FFF; width: 35px;" ng-click="showOptionsMenu()">
-        <i class="icon ion-navicon" ng-if="1"></i> 
-        <!-- <i class="fa fa-chevron-left" ng-if="navToggled"></i> -->
-        <!-- <img class="cart-image" ng-src="./img/feed/wallet-icon.png"/> -->
-      </button>
+      
+          <button class="button button-clear cart-button" style="margin: 0; color: #FFF; width: 35px;" ng-click="showOptionsMenu()">
+            <i class="icon ion-navicon"></i> 
+          </button>
+
+          <button class="button button-clear cart-button" style="width: 35px" ng-click="callSearch()">
+            <img class="cart-image" ng-src="./img/feed/search.png"/>
+          </button>
+
+          <button class="button button-clear" style="text-align: left; margin-left: 10px; font-weight: 400; color: #721e1e; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size: 14px; width: 50%" ng-click="changeLocation()">
+              <tag ng-if="selectedOutlet['location']" style="color: #721e1e">
+                <i class="fa fa-map-marker"></i> {{selectedOutlet['location']}}
+              </tag>
+
+              <tag ng-if="!selectedOutlet['location']" style="color: #ffbc19">
+                <i class="fa fa-exclamation-triangle"></i> Set your Location
+              </tag>
+          </button>  
+
     </div>
-
-
-
-            <div class="buttons" style="position: absolute; top: 5px; left: 42px; bottom: 5px;">
-              <button class="button button-clear cart-button" ng-click="callSearch()">
-              <img class="cart-image" ng-src="./img/feed/search.png"/>
-              </button>
-            </div>
 
 
 
