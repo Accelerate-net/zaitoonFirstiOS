@@ -126,7 +126,8 @@ angular.module('landing.services', [])
         $scope.choosePlace = function(place) {
           LocationService.getDetails(place.place_id).then(function(location) {
             userLocationService.setCoords(location.geometry.location.lat(), location.geometry.location.lng());
-            userLocationService.setText(location.formatted_address);
+
+            userLocationService.setText(location.name);
             $scope.location = location;
             $scope.close();
           });

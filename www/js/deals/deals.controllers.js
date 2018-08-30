@@ -147,7 +147,7 @@ angular.module('deals.controllers', [])
 
     })
 
-    .controller('DealsCartCtrl', function($scope, $ionicPlatform, $ionicLoading, $state, $http, ProfileService, $rootScope, $ionicActionSheet, products, DealsCartService, outletService) {
+    .controller('DealsCartCtrl', function($scope, $ionicPlatform, $ionicLoading, $state, $http, ProfileService, $rootScope, $ionicPopup, $ionicActionSheet, products, DealsCartService, outletService) {
 
 
   
@@ -263,47 +263,83 @@ angular.module('deals.controllers', [])
 
         $scope.orderID = '';
 
-        var successCallback = function(payment_id) {
-            var data = {};
-            data.token = JSON.parse(window.localStorage.user).token;
-            data.orderID = $scope.orderID;
-            data.transactionID = payment_id;
+        var successCallback = function(success) {
 
+            var mydata = {};
+            mydata.token = JSON.parse(window.localStorage.user).token;
+            mydata.orderID = $scope.orderID;
+            mydata.transactionID = success.razorpay_payment_id;
+            mydata.razorpay_order_id = success.razorpay_order_id; 
+            mydata.razorpay_signature = success.razorpay_signature;
 
-                //LOADING
-                $ionicLoading.show({
-                    template:  '<ion-spinner></ion-spinner>'
-                });
-
-            //alert('Details: '+data.token+'______'+data.orderID+'____'+data.transactionID)
-
-            $http({
-                    method: 'POST',
-                    url: 'https://www.zaitoon.online/services/processpasspayment.php',
-                    data: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    timeout: 10000
-                })
-                .success(function(response) {
+                var attemptsCount = 1;          
+                processPayment();
+                
+                function processPayment(){
+                
                     $ionicLoading.hide();
-                    if (response.status) {
-                        window.localStorage.removeItem("zaitoonFirst_dealsCart");
-                        $state.go('main.app.passes');
-                    } else {
+                    $ionicLoading.show({
+                        template: "<ion-spinner></ion-spinner><br>Placing Order<br><div id='paymentTimer'></div>"
+                    });
+
+                    var timeLeft = 20;
+                    var mytimer = setInterval(function() {
+                        timeLeft--;
+                        document.getElementById("paymentTimer").innerHTML = timeLeft+" Seconds";
+                        if(timeLeft == 0)
+                        {
+                            clearInterval(mytimer);
+                            document.getElementById("paymentTimer").innerHTML = "Failed. Retrying...";
+                            setTimeout(function(){
+                                attemptsCount++;
+                                if(attemptsCount == 5){
+                                    $ionicLoading.hide();
+                                    $ionicLoading.show({
+                                        template: "<b style='color: #ef473a'>Failed.</b><br>Order was not Placed.",
+                                        duration: 3000
+                                    });
+                                }
+                                else{
+                                    processPayment();
+                                }
+                            }, 2000);
+                        }
+                    }, 1000);
+                
+                
+                    //Process Payment
+                    $http({
+                        method: 'POST',
+                        url: 'https://www.zaitoon.online/services/processpasspayment.php',
+                        data: mydata,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        timeout: 10000
+                    })
+                    .success(function(response) {
+                        $ionicLoading.hide();
+                        clearInterval(mytimer);
+                        if (response.status) {
+                            //Go to track page
+                            window.localStorage.removeItem("zaitoonFirst_dealsCart");
+                            $state.go('main.app.passes');
+                        } else {
+                            var alertPopup = $ionicPopup.alert({
+                                cssClass: 'popup-outer confirm-alert-view',
+                                title: 'Order Failed',
+                                template: '<p style="padding: 15px 5px; color: red">' + response.error + '</p>'
+                            });
+                        }
+                    })
+                    .error(function(data) {
                         $ionicLoading.show({
-                            template: 'Something went wrong. The order was not placed.',
+                            template: data.error,
                             duration: 3000
                         });
-                    }
-                })
-                .error(function(data) {
-                    $ionicLoading.show({
-                        template: "Order was not placed due to network error.",
-                        duration: 3000
                     });
-                });
+              }
+
 
             called = false
         };
@@ -318,7 +354,6 @@ angular.module('deals.controllers', [])
             called = false
         };
 
-        
 
 
         //$ionicPlatform.ready(function(){
@@ -411,24 +446,31 @@ angular.module('deals.controllers', [])
                                 $scope.orderID = response.orderid;
                                 //Payment options
                                 var options = {
-                                    description: 'Payment for Order #' + response.orderid,
+                                    description: 'Payment for Special Offers',
+                                    order_id: response.reference,
                                     image: 'https://zaitoon.online/services/images/razor_icon.png',
                                     currency: 'INR',
                                     key: accKey,
                                     amount: response.amount * 100,
-                                    name: 'Zaitoon Online',
+                                    name: 'Zaitoon',
                                     prefill: {
                                         email: $rootScope.user.email,
                                         contact: $rootScope.user.mobile,
                                         name: $rootScope.user.name
                                     },
+                                    notes: {
+                                                "Zaitoon Special Offer ID": response.orderid
+                                            },
                                     theme: {
                                         color: '#e74c3c'
                                     }
                                 };
 
                                 //Step 2 - Make Payment
-                                RazorpayCheckout.open(options, successCallback, cancelCallback);
+                                RazorpayCheckout.on('payment.success', successCallback)
+                                RazorpayCheckout.on('payment.cancel', cancelCallback)
+                                RazorpayCheckout.open(options)
+                                        
                                 called = true;
                             
                             } else {

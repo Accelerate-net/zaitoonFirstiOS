@@ -1,16 +1,11 @@
 <ion-view class="account-profile-view account-sub-view" cache-view="false">
   <ion-content>
 
-   <div class="row user-info-row">
-      <div class="col col-25">
-         <pre-img ratio="_1_1">
-           <img class="profile-image" src="img/common/default_user.png" spinner-on-load/>
-         </pre-img>
-      </div>
-      <div class="col col-75 col-center user-info-col">
-        <h3 ng-if="!isEditMode" class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{customer.name}}</h3>
+   <div class="row user-info-row" style="padding: 15px 20px 10px 20px; text-align: center; border-left: 15px solid #a8302b; border-right: 15px solid #a8302b; background: #fdfbee; margin-bottom: 15px;">
+      <div class="col col-100 col-center user-info-col">
+        <h3 ng-if="!isEditMode" class="user-welcome" style="font-weight: 400; font-size: 24px; color: #a71d2b">{{customer.name}}</h3>
         <h3 ng-if="isEditMode" class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{temp_name}}</h3>
-        <p class="user-email" style="font-weight: 300; color: #7d7d7d">Member since {{customer.memberSince}}</p>
+        <p class="user-email" style="font-weight: 300; color: #5c412c">Member since {{customer.memberSince}}</p>
       </div>
 
    </div>

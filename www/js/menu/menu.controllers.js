@@ -42,11 +42,54 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
 
+        $scope.outletSelection = outletService.getInfo();
+        if ($scope.outletSelection.outlet == "") {
+            $myOutlet = "VELACHERY";
+        } else {
+            $myOutlet = $scope.outletSelection.outlet;
+        }
+
 
 
         $scope.callSearch = function() {
-            $rootScope.$broadcast('search_called', true);
-            $rootScope.$emit('search_called', true);
+
+                $ionicLoading.show();
+
+                //Fetch Data for Search
+                $http({
+                        method: 'GET',
+                        url: 'https://www.zaitoon.online/services/fetchmenuallmob.php?outlet='+$myOutlet,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        timeout: 10000
+                    })
+                    .success(function(response) {
+
+                        $ionicLoading.hide();
+
+                        $scope.searchMenuData = response;
+                        if ($scope.searchMenuData.length == 0) {
+                            $scope.isEmpty = true;
+                        } else {
+                            $scope.isEmpty = false;
+                        }
+
+                        $rootScope.$broadcast('search_called', true);
+                        $rootScope.$emit('search_called', true);
+
+                    })
+                    .error(function(data) {
+                        $ionicLoading.hide();
+                        $ionicLoading.show({
+                            template: "Not responding. Check your connection.",
+                            duration: 3000
+                        });
+
+                        $rootScope.$broadcast('search_called', true);
+                        $rootScope.$emit('search_called', true);
+                        
+                    });
         }
 
 
@@ -115,7 +158,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         $scope.setType = function(value) {
             $scope.queryType = value;
             if (value == 'REFUND') {
-                $scope.myquery.comment = 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razoray Payment ID for your reference.';
+                $scope.myquery.comment = 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.';
             } else {
                 $scope.myquery.comment = '';
             }
@@ -133,7 +176,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                 $scope.submitError = "Please elaborate your query";
             } else if (($scope.myquery.comment).length > 500) {
                 $scope.submitError = "Comments can not contain more than 500 characters";
-            } else if ($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razoray Payment ID for your reference.' && $scope.queryType == 'REFUND') {
+            } else if ($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.' && $scope.queryType == 'REFUND') {
                 $scope.submitError = "Please edit the date and time of placing the order, order amount etc. in comments";
             } else if ($scope.queryType == 'REFUND' && ($scope.myquery.reference).length < 1) {
                 $scope.submitError = "Add 'Payment Reference ID' from Razorpay";
@@ -142,6 +185,8 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
                 $scope.myquery.type = $scope.queryType;
                 $scope.myquery.token = JSON.parse(window.localStorage.user).token;
+
+                $scope.myquery.source = 'IOS';
 
                 //LOADING
                 $ionicLoading.show({
