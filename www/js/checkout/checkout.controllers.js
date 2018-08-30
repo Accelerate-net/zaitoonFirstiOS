@@ -1,6 +1,6 @@
 angular.module('checkout.controllers', [])
 
-    .controller('CheckoutCtrl', function($timeout, locationChangeRouteTrackerService, ConnectivityMonitor, trackOrderService, $scope, $state, $http, ProfileService, $rootScope, products, CheckoutService, couponService, outletService, $ionicPopover, $ionicPlatform, $ionicLoading) {
+    .controller('CheckoutCtrl', function($timeout, $ionicPopup, locationChangeRouteTrackerService, ConnectivityMonitor, trackOrderService, $scope, $state, $http, ProfileService, $rootScope, products, CheckoutService, couponService, outletService, $ionicPopover, $ionicPlatform, $ionicLoading) {
 
         //If not logged in (meaning, does not have a token)?
         if (_.isUndefined(window.localStorage.user) && window.localStorage.user != "") {
@@ -148,7 +148,7 @@ angular.module('checkout.controllers', [])
         $scope.tax = 0;
         $scope.getTax = function() {
             $scope.tax = $scope.subtotal * $scope.outletSelection['taxPercentage'];
-            return Math.ceil($scope.tax);
+            return parseFloat($scope.tax).toFixed(2);
         };
 
         $scope.getParcel = function() {
@@ -157,11 +157,12 @@ angular.module('checkout.controllers', [])
             } else {
                 $scope.parcel = $scope.subtotal * $scope.outletSelection['parcelPercentagePickup'];
             }
-            return Math.ceil($scope.parcel);
+            return parseFloat($scope.parcel).toFixed(2);
         };
 
         $scope.getTotal = function() {
-            return $scope.subtotal + Math.ceil($scope.tax) + Math.ceil($scope.parcel);
+            var total_sum = $scope.subtotal + (Math.round($scope.parcel * 100) / 100) + (Math.round($scope.tax * 100) / 100);
+            return parseFloat(total_sum).toFixed(2);
         };
 
         $scope.cancel = function() {
@@ -363,40 +364,84 @@ angular.module('checkout.controllers', [])
         //RAZORPAY INTEGRATION
         var called = false
 
-        var successCallback = function(payment_id) {
-            var data = {};
-            data.token = JSON.parse(window.localStorage.user).token;
-            data.orderID = $scope.orderID;
-            data.transactionID = payment_id;
+        var successCallback = function(success) {
 
-            $http({
-                    method: 'POST',
-                    url: 'https://www.zaitoon.online/services/processpayment.php',
-                    data: data,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    timeout: 10000
-                })
-                .success(function(response) {
-                    if (response.status) {
-                        //Go to track page
-                        trackOrderService.setOrderID(response.orderid);
-                        window.localStorage.removeItem("zaitoonFirst_cart");
-                        $state.go('main.app.checkout.track');
-                    } else {
+            var mydata = {};
+            mydata.token = JSON.parse(window.localStorage.user).token;
+            mydata.orderID = $scope.orderID;
+            mydata.transactionID = success.razorpay_payment_id;
+            mydata.razorpay_order_id = success.razorpay_order_id; 
+            mydata.razorpay_signature = success.razorpay_signature;
+
+                var attemptsCount = 1;          
+                processPayment();
+                
+                function processPayment(){
+                
+                    $ionicLoading.hide();
+                    $ionicLoading.show({
+                        template: "<ion-spinner></ion-spinner><br>Placing Order<br><div id='paymentTimer'></div>"
+                    });
+
+                    var timeLeft = 20;
+                    var mytimer = setInterval(function() {
+                        timeLeft--;
+                        document.getElementById("paymentTimer").innerHTML = timeLeft+" Seconds";
+                        if(timeLeft == 0)
+                        {
+                            clearInterval(mytimer);
+                            document.getElementById("paymentTimer").innerHTML = "Failed. Retrying...";
+                            setTimeout(function(){
+                                attemptsCount++;
+                                if(attemptsCount == 5){
+                                    $ionicLoading.hide();
+                                    $ionicLoading.show({
+                                        template: "<b style='color: #ef473a'>Failed.</b><br>Order was not Placed.",
+                                        duration: 3000
+                                    });
+                                }
+                                else{
+                                    processPayment();
+                                }
+                            }, 2000);
+                        }
+                    }, 1000);
+                
+                
+                    //Process Payment
+                    $http({
+                        method: 'POST',
+                        url: 'https://www.zaitoon.online/services/processpaymentmob.php',
+                        data: mydata,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        timeout: 10000
+                    })
+                    .success(function(response) {
+                        $ionicLoading.hide();
+                        clearInterval(mytimer);
+                        if (response.status) {
+                            //Go to track page
+                            trackOrderService.setOrderID(response.orderid);
+                            window.localStorage.removeItem("zaitoonFirst_cart");
+                            $state.go('main.app.checkout.track');
+                        } else {
+                            var alertPopup = $ionicPopup.alert({
+                                cssClass: 'popup-outer confirm-alert-view',
+                                title: 'Order Failed',
+                                template: '<p style="padding: 15px 5px; color: red">' + response.error + '</p>'
+                            });
+                        }
+                    })
+                    .error(function(data) {
                         $ionicLoading.show({
-                            template: 'Something went wrong. The order was not placed.',
+                            template: data.error,
                             duration: 3000
                         });
-                    }
-                })
-                .error(function(data) {
-                    $ionicLoading.show({
-                        template: "Order was not placed due to network error.",
-                        duration: 3000
                     });
-                });
+              }
+
 
             called = false
         };
@@ -434,9 +479,11 @@ angular.module('checkout.controllers', [])
                         data.outlet = window.localStorage.outlet;
                         data.isTakeAway = $scope.checkoutMode == 'takeaway' ? true : false;
 
+                        var all_extras_temp = parseFloat(this.getTax()) + parseFloat(this.getParcel());
+
                         var formattedcart = {};
-                        formattedcart.cartTotal = this.getSubtotal();
-                        formattedcart.cartExtra = this.getTax() + this.getParcel();
+                        formattedcart.cartTotal = Math.round(this.getSubtotal() * 100 / 100);
+                        formattedcart.cartExtra = Math.round(all_extras_temp * 100 / 100);
                         formattedcart.cartDiscount = $scope.couponDiscount;
                         //formattedcart.rewardsDiscount = $scope.rewardCoins;
                         formattedcart.cartCoupon = couponService.getCoupon();
@@ -447,7 +494,7 @@ angular.module('checkout.controllers', [])
 
                         $http({
                                 method: 'POST',
-                                url: 'https://www.zaitoon.online/services/createorder.php',
+                                url: 'https://www.zaitoon.online/services/createordermob.php',
                                 data: data,
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -462,19 +509,24 @@ angular.module('checkout.controllers', [])
                                     });
                                 } else {
                                     if (response.isPrepaidAllowed) {
+    
                                         $scope.orderID = response.orderid;
                                         //Payment options
                                         var options = {
-                                            description: 'Payment for Order #' + response.orderid,
+                                            description: 'Payment for Online Order',
+                                            order_id: response.reference,
                                             image: 'https://zaitoon.online/services/images/razor_icon.png',
                                             currency: 'INR',
                                             key: $scope.razorpayKey,
                                             amount: response.amount * 100,
-                                            name: 'Zaitoon Online',
+                                            name: 'Zaitoon',
                                             prefill: {
                                                 email: $rootScope.user.email,
                                                 contact: $rootScope.user.mobile,
                                                 name: $rootScope.user.name
+                                            },
+                                            notes: {
+                                                "Zaitoon Order ID": response.orderid
                                             },
                                             theme: {
                                                 color: '#e74c3c'
@@ -482,8 +534,12 @@ angular.module('checkout.controllers', [])
                                         };
 
                                         //Step 2 - Make Payment
-                                        RazorpayCheckout.open(options, successCallback, cancelCallback);
+                                        RazorpayCheckout.on('payment.success', successCallback)
+                                        RazorpayCheckout.on('payment.cancel', cancelCallback)
+                                        RazorpayCheckout.open(options)
+                                        
                                         called = true
+
                                     } else {
                                         $ionicLoading.show({
                                             template: '<b style="color: #e74c3c; font-size: 150%">Sorry!</b><br>Online payment is not available. Please opt for Cash on Delivery (COD)',
@@ -511,9 +567,11 @@ angular.module('checkout.controllers', [])
                     data.outlet = window.localStorage.outlet;
                     data.isTakeAway = $scope.checkoutMode == 'takeaway' ? true : false;
 
+                    var all_extras_temp = parseFloat(this.getTax()) + parseFloat(this.getParcel());
+
                     var formattedcart = {};
-                    formattedcart.cartTotal = this.getSubtotal();
-                    formattedcart.cartExtra = this.getTax() + this.getParcel();
+                    formattedcart.cartTotal = Math.round(this.getSubtotal() * 100 / 100);
+                    formattedcart.cartExtra = Math.round(all_extras_temp * 100 / 100);
                     formattedcart.cartDiscount = $scope.couponDiscount;
                     //formattedcart.rewardsDiscount = $scope.rewardCoins;
                     formattedcart.cartCoupon = couponService.getCoupon();
@@ -524,7 +582,7 @@ angular.module('checkout.controllers', [])
 
                     $http({
                             method: 'POST',
-                            url: 'https://www.zaitoon.online/services/createorder.php',
+                            url: 'https://www.zaitoon.online/services/createordermob.php',
                             data: data,
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'

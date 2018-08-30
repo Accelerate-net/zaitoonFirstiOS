@@ -102,7 +102,7 @@ angular.module('cart.controllers', [])
 	$scope.tax = 0;
 	$scope.getTax = function() {
 		$scope.tax = $scope.subtotal * $scope.outletSelection['taxPercentage'];
-		return Math.ceil($scope.tax);
+		return parseFloat($scope.tax).toFixed(2);
 	};
 
 	$scope.getParcel = function() {
@@ -112,11 +112,12 @@ angular.module('cart.controllers', [])
 		else{
 			$scope.parcel = $scope.subtotal * $scope.outletSelection['parcelPercentagePickup'];
 		}
-		return Math.ceil($scope.parcel);
+		return parseFloat($scope.parcel).toFixed(2);
 	};
 
 	$scope.getTotal = function() {
-		return $scope.subtotal + Math.ceil($scope.tax) + Math.ceil($scope.parcel);
+		var total_sum = $scope.subtotal + (Math.round($scope.parcel * 100) / 100) + (Math.round($scope.tax * 100) / 100);
+		return parseFloat(total_sum).toFixed(2);
 	};
 
 	//Go to checkout - validate cart total
@@ -148,7 +149,7 @@ angular.module('cart.controllers', [])
 			else{
 				if($scope.orderType == 'delivery'){ //Check for minimum order criteria
 					console.log('DELIVERY...')
-					var total = this.getSubtotal();
+					var total = this.getSubtotal() + parseFloat(this.getParcel()) + parseFloat(this.getTax());
 					var min = $scope.outletSelection['minAmount'];
 					if(total >= min){
 						$state.go('main.app.checkout');

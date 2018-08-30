@@ -6,7 +6,7 @@
   </ion-header-bar>
 
   
-    <ion-content style="padding-top: 20px">
+    <ion-content style="padding-top: 20px;">
     <div class="orders-row">
       <div ng-if="isEmpty"><p style="color: #C7C7C7; text-align: center">You have not purchased or claimed any Offers yet.</p></div>
       <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
@@ -28,8 +28,8 @@
             </div>
           </div>
         </div>
-        <div class="item item-divider order-footer">
-          <div class="button button-small button-outline button-primary" style="float: right; margin-top:5px" ng-click="openPasses(order.orderID)">View Passes</div>
+        <div class="item item-divider order-footer" style="background: #f3efca; color: #676552; font-size: 13px; text-align: center; text-transform: uppercase; font-weight: 400; letter-spacing: 2px; border-top: 2px solid #d2cb87;" ng-click="openPasses(order.orderID)">
+          View Passes
         </div>
 
       </div>

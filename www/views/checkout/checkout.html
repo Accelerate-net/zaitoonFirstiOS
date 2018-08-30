@@ -9,7 +9,9 @@
   <!-- Option for changing the pickup location -->
   <div ng-if="checkoutMode == 'takeaway'">
     <div ng-if="isPickupChangeable">
-      <h3 class="checkout-sub-title" style="font-weight: 300; font-size: 14px; text-align: center; padding-bottom: 0px">We have set the pickup location to your nearest outlet. Change it if you want to.</h3>
+      
+      <h3 class="checkout-sub-title" style="padding: 15px 15px 0px 15px;">Pickup Outlet</h3>
+
       <div class="row address-row">
         <!-- Pickup location Chooser -->
         <div class="address-chooser" ng-click="openOutletPopover($event)" style="width: 100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
@@ -18,10 +20,15 @@
           </button>
         </div>
       </div>
+      <h3 class="checkout-sub-title" style="font-weight: 400; font-size: 11px; text-align: center; padding: 0 15px; color: #bdbdbd; margin-top: -5px;" ng-if="data.selected_outlet.name">We have set the pickup location to your nearest outlet. Change it if you want to.</h3>
+
     </div>
     <div ng-if="!isPickupChangeable">
-      <h3 class="checkout-sub-title" style="font-weight: 300; font-size: 14px; text-align: center; padding-bottom: 0px">The prices are special at this outlet and it serves only a selected community. This order can be picked up only from the following outlet:</h3>
+      
+      <h3 class="checkout-sub-title" style="padding: 15px 15px 0px 15px;">Pickup Outlet</h3>
       <p style="padding: 5px 15px; text-align: center; font-size: 18px;">{{pickupAddressDefault}}</p>
+      <h3 class="checkout-sub-title" style="font-weight: 400; font-size: 11px; text-align: center; padding: 0 15px; color: #bdbdbd; margin-top: -5px;">The prices are special at this outlet and it serves only a selected community. This order can be picked up only from {{pickupAddressDefault}}</h3>
+
     </div>
   </div>
 
@@ -39,10 +46,17 @@
     <h3 class="checkout-sub-title" style="">Payment Information</h3>
 
     <div class="paymentRadio" style="padding: 0px 15px" ng-if="onlinePayFlag">
-      <ion-list>
-        <ion-radio ng-model="paychoice" ng-value="'PRE'" ng-click="setPay('PRE')">Pay Online</ion-radio>
-        <ion-radio ng-model="paychoice" ng-value="'COD'" ng-click="setPay('COD')">Cash on Delivery (COD)</ion-radio>
-      </ion-list>
+      <div ng-if="checkoutMode == 'delivery'">
+        <ion-list>
+          <ion-radio ng-model="paychoice" ng-value="'PRE'" ng-click="setPay('PRE')">Pay Online</ion-radio>
+          <ion-radio ng-model="paychoice" ng-value="'COD'" ng-click="setPay('COD')">Cash on Delivery (COD)</ion-radio>
+        </ion-list>
+      </div>
+      <div ng-if="checkoutMode == 'takeaway'"> <!-- Only ONLINE PAY for Takeaways -->
+        <ion-list>
+          <ion-radio ng-model="paychoice" ng-value="'PRE'" ng-click="setPay('PRE')">Pay Online</ion-radio>
+        </ion-list>
+      </div>
     </div>
 
 
@@ -58,7 +72,7 @@
     <div class="row promo-code-row">
       <div class="col col-75">
         <label class="item item-input promo-item" style="border-bottom-left-radius: 6px; border-top-left-radius: 6px; border: 1px solid #c52031; border-right: none; background: none;">
-          <input type="text" ng-model="promoCode" style="text-transform:uppercase;" ng-blur="validateCoupon()" ng-focus="enteringCoupon()">
+          <input type="text" ng-model="promoCode" style="text-transform: uppercase; font-weight: bold; font-size: 16px; letter-spacing: 2px; color: #a8302b; }" ng-blur="validateCoupon()" ng-focus="enteringCoupon()">
         </label>
       </div>
       <div class="col">
@@ -158,8 +172,8 @@
           </div>
           <div class="col">
             <span ng-if="!isCouponApplied && !availRewards" class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal() | number:2 }}</span>
-            <span ng-if="isCouponApplied && !availRewards" class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal()-couponDiscount | number:2 }}</span>
-            <span ng-if="!isCouponApplied && availRewards" class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal()-rewardCoins | number:2 }}</span>
+            <span ng-if="isCouponApplied && !availRewards" class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal() - couponDiscount | number:2 }}</span>
+            <span ng-if="!isCouponApplied && availRewards" class="bill-item-value"><i class="fa fa-inr"></i> {{ getTotal() - rewardCoins | number:2 }}</span>
           </div>
         </div>
       </li>

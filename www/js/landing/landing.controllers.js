@@ -73,7 +73,8 @@ angular.module('landing.controllers', [])
         /* To tweak already set location */
         $scope.currentLocation = window.localStorage.location;
         $scope.location = {};
-        $scope.location.formatted_address = $scope.currentLocation;
+        //$scope.location.formatted_address = $scope.currentLocation;
+        $scope.location.name = $scope.currentLocation;
 
         /* NEW GOOGLE PLACE BASED OUTLET SELECTION */
         $scope.setGoogleLocation = function() {
@@ -100,9 +101,10 @@ angular.module('landing.controllers', [])
               if (status === 'OK') {
                 if (results[0]) {
                     userLocationService.setCoords(lat, lng);
-                    userLocationService.setText(results[0].formatted_address);
-                    $scope.location.formatted_address = results[0].formatted_address;  
-                    $scope.location.place_id = results[0].place_id; 
+                    $scope.location.name = results[0].formatted_address;
+                    $scope.location.place_id = results[0].place_id;                 
+                    $scope.location.place_id = results[0].place_id;   
+                    userLocationService.setText($scope.location.name);    
 
                 } else {
                     $ionicLoading.show({
@@ -118,6 +120,16 @@ angular.module('landing.controllers', [])
               }
             });
         }
+
+
+        $scope.presetIITMLocation = function(){
+            userLocationService.setCoords('12.98534830000001', '80.23629019999998');
+            userLocationService.setText('IIT Madras Campus');
+            $scope.location.name = 'IIT Madras Campus';
+            $scope.location.place_id = "ChIJ_THSv35dUjoR3fFu3LGVZ3I";
+        }
+
+
 
         $scope.fetchGeoCoordinates = function(){
             
@@ -136,10 +148,78 @@ angular.module('landing.controllers', [])
                     $ionicLoading.hide();
                     $ionicLoading.show({
                         template: 'Error occured while fetching your location. Enter location manually.',
+                        cssClass: 'popup-pin',                        
                         duration: 3000
                     });                    
                 });
         }
+
+        $scope.askToConfirm = function(response, tempUserLocation){
+                            
+                            //Warn Only Takeaway Possible.
+                            var confirmPopup = $ionicPopup.confirm({
+                                title: "Delivery Not Available",
+                                template: '<p style="font-size: 14px">Selected area is beyond our delivery limits. You can place <tag style="color: #c52031; font-weight: bold;">only Take Away</tag> orders.</p>'
+                            });
+
+                            confirmPopup.then(function(res) {
+                                 if(res) {
+                                            //LOADING
+                                            $ionicLoading.show({
+                                                template: '<ion-spinner></ion-spinner>'
+                                            }); 
+
+                                            //Set outlet and location
+                                            window.localStorage.outlet = response.data.response.outlet;
+                                            window.localStorage.location = tempUserLocation;
+                                            window.localStorage.locationCode = response.data.response.locationCode;
+
+                                            var info = {};
+                                            info.onlyTakeAway = !response.data.isServed;
+                                            info.outlet = response.data.response.outlet;
+                                            info.isSpecial = response.data.response.isSpecial;
+                                            info.city = response.data.response.city;
+                                            info.location = tempUserLocation;
+                                            info.locationCode = response.data.response.locationCode;
+                                            info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
+                                            info.isOpen = response.data.response.isOpen;
+                                            info.paymentKey = response.data.response.razorpayID;
+                                            info.isTaxCollected = response.data.response.isTaxCollected;
+                                            info.taxPercentage = response.data.response.taxPercentage;
+                                            info.isParcelCollected = response.data.response.isParcelCollected;
+                                            info.parcelPercentageDelivery = response.data.response.parcelPercentageDelivery;
+                                            info.parcelPercentagePickup = response.data.response.parcelPercentagePickup;
+                                            info.minAmount = response.data.response.minAmount;
+                                            info.minTime = response.data.response.minTime;
+
+                                            info.isDelayed = response.data.response.isDelayed;
+                                            info.delayMessage = response.data.response.delayMessage;
+                                            info.closureMessage = response.data.response.closureMessage;
+
+                                            outletService.setOutletInfo(info);
+                                            outletWarningStatusService.reset();
+
+
+                                            //Clear the changeLocationFlag if at all set.
+                                            window.localStorage.changeLocationFlag = "";
+
+                                            $ionicLoading.hide();
+
+                                            //Go back to the home route page (if it was redirected to set location)
+                                            var homeRoute = locationChangeRouteTrackerService.getSource();
+
+                                            if(homeRoute != ''){
+                                                locationChangeRouteTrackerService.reset();
+                                                $state.go(homeRoute);
+                                            }
+                                            else{
+                                                $scope.isLocationSet = true;
+                                            }
+                                 }
+                              });       
+        }
+
+
 
 
         $rootScope.getGoogleOutletSuggestion = function(lat, lng) {
@@ -151,7 +231,7 @@ angular.module('landing.controllers', [])
 
                 $http({
                     method: "GET",
-                    url: 'https://www.zaitoon.online/services/googleoutletassigner.php?lat='+lat+'&lng='+lng
+                    url: 'https://www.zaitoon.online/services/googleoutletassigner.php?lat='+lat+'&lng='+lng+'&version=15'
                 }).then(function(response) {
 
                 	$ionicLoading.hide();
@@ -213,76 +293,7 @@ angular.module('landing.controllers', [])
                         //NOT SERVICED AREAS
                         else {
                             //Warn Only Takeaway Possible.
-                            $ionicPopup.show({
-                                title: "Delivery Not Available",
-                                subTitle: 'Selected area is beyond our delivering area. You can place only Take Away orders.',
-                                scope: $scope,
-                                buttons: [{
-                                        text: 'Cancel',
-                                        onTap: function(e) {
-                                            return true;
-                                        }
-                                    },
-                                    {
-                                        text: '<b>OK</b>',
-                                        type: 'button-balanced',
-                                        onTap: function(e) {
-
-                                            //LOADING
-								            $ionicLoading.show({
-								                template: '<ion-spinner></ion-spinner>'
-								            });	
-
-                                            //Set outlet and location
-                                            window.localStorage.outlet = response.data.response.outlet;
-                                            window.localStorage.location = userLocationService.getText();
-                                            window.localStorage.locationCode = response.data.response.locationCode;
-
-                                            var info = {};
-                                            info.onlyTakeAway = !response.data.isServed;
-                                            info.outlet = response.data.response.outlet;
-                                            info.isSpecial = response.data.response.isSpecial;
-                                            info.city = response.data.response.city;
-                                            info.location = userLocationService.getText();
-                                            info.locationCode = response.data.response.locationCode;
-                                            info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
-                                            info.isOpen = response.data.response.isOpen;
-                                            info.paymentKey = response.data.response.razorpayID;
-                                            info.isTaxCollected = response.data.response.isTaxCollected;
-                                            info.taxPercentage = response.data.response.taxPercentage;
-                                            info.isParcelCollected = response.data.response.isParcelCollected;
-                                            info.parcelPercentageDelivery = response.data.response.parcelPercentageDelivery;
-                                            info.parcelPercentagePickup = response.data.response.parcelPercentagePickup;
-                                            info.minAmount = response.data.response.minAmount;
-                                            info.minTime = response.data.response.minTime;
-
-                                            info.isDelayed = response.data.response.isDelayed;
-                                            info.delayMessage = response.data.response.delayMessage;
-                                            info.closureMessage = response.data.response.closureMessage;
-
-                                            outletService.setOutletInfo(info);
-                                            outletWarningStatusService.reset();
-
-
-                                            //Clear the changeLocationFlag if at all set.
-                                            window.localStorage.changeLocationFlag = "";
-
-                                            $ionicLoading.hide();
-
-				                            //Go back to the home route page (if it was redirected to set location)
-				                            var homeRoute = locationChangeRouteTrackerService.getSource();
-
-				                            if(homeRoute != ''){
-				                            	locationChangeRouteTrackerService.reset();
-				                            	$state.go(homeRoute);
-				                            }
-				                            else{
-				                            	$scope.isLocationSet = true;
-				                            }
-                                        }
-                                    },
-                                ]
-                            });
+                            $scope.askToConfirm(response, userLocationService.getText());
                         }
                     } else {
                         $ionicLoading.show({
@@ -305,7 +316,7 @@ angular.module('landing.controllers', [])
                 template: '<ion-spinner></ion-spinner>'
             });
 
-            $http.get('https://www.zaitoon.online/services/googleoutletassigner.php?lat='+saved_coords[0]+'&lng='+saved_coords[1])
+            $http.get('https://www.zaitoon.online/services/googleoutletassigner.php?lat='+saved_coords[0]+'&lng='+saved_coords[1]+'&version=15')
                 .then(function(response) {
                     $ionicLoading.hide();
 
@@ -349,6 +360,20 @@ angular.module('landing.controllers', [])
                 });
         }
 
+
+        $scope.cancelSettingLocation = function(){
+             //Clear the changeLocationFlag if at all set.
+            window.localStorage.changeLocationFlag = "";  
+             //Go back to the home route page (if it was redirected to set location)
+            var homeRoute = locationChangeRouteTrackerService.getSource();
+             if(homeRoute != ''){
+                locationChangeRouteTrackerService.reset();
+                $state.go(homeRoute);
+            }
+            else{
+                $scope.isLocationSet = true;
+            }
+        }
 
 
     /* OLD API BASED OUTLET SELECTION */

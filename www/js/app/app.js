@@ -67,6 +67,7 @@ angular.module('zaitoonFirst', [
     .run(function($ionicPlatform, amMoment, $rootScope) {
 
 
+
         $rootScope.previousView = [];
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {

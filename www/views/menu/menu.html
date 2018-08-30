@@ -1,11 +1,11 @@
 <ion-view class="feed-food-view feed-sub-view search-view" cache-view="false">
 
-  <ion-header-bar class="search-header" ng-if="showSearch">
+  <div class="search-header" ng-if="showSearch">
     <div class="row item-input-inset search-row">
       <div class="col col-90">
         <label class="item-input-wrapper search-label">
           <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" name="search_query" ng-model="search.query">
+          <input type="search" id="menu_search_input" placeholder="Search" name="search_query" ng-model="search.query">
         </label>
       </div>
       <div class="col">
@@ -13,10 +13,10 @@
         </button>
       </div>
     </div>
-  </ion-header-bar>
+  </div>
 
-  <ion-header-bar class="search-header-filter" ng-if="isFilter">
-    <div class="row item-input-inset search-row-filter">
+  <div class="search-header-filter" ng-if="isFilter" style="z-index: 100 !important; position: relative;">
+    <div class="row item-input-inset search-row-filter" style="padding: 0 10px">
       <div class="col col-90">
           <tag style="color: white;">Filter Applied</tag>
       </div>
@@ -25,7 +25,7 @@
         </button>
       </div>
     </div>
-  </ion-header-bar>
+  </div>
 
   <ion-footer-bar class="" style="background-color: #2c3e50" ng-if="isOutletClosedNow && outletClosureWarning">
     <div class="row item-input-inset search-row-filter">
@@ -53,9 +53,9 @@
 
 
 
-  <ion-content ng-controller="featureCtrl" on-swipe-left="goLeft()" on-swipe-right="goRight()">
+  <ion-content ng-show="!showSearch" ng-controller="featureCtrl" on-swipe-left="goLeft()" on-swipe-right="goRight()" ng-class="{marginTop50: isFilter}">
 
-    <h1 ng-if="items.length > 0" class="myMenuSubTitle" style="padding: 0px 10px 10px 10px; margin: 0; margin-top: 10px; color: #f39c12">Featured Dishes</h1>
+    <h1 ng-if="items.length > 0 && !isFilter" class="myMenuSubTitle" style="padding: 0px 10px 10px 10px; margin: 0; margin-top: 10px; color: #f39c12">Featured Dishes</h1>
     <hscroller ng-if="!isFilter" style="margin-bottom: 15px">
       <ion-scroll direction="x">
         <hcard ng-repeat="item in items" index="{{$index}}" available="{{item.isAvailable}}" name="{{item.itemName}}" price="{{item.itemPrice}}" image="{{item.photo}}" ng-click="addFeature(item)"></hcard>
@@ -103,9 +103,58 @@
       </div>
     </div>
 
-
-
   </ion-content>
+
+
+
+
+  <!-- If searching - Search whole Menu -->
+  <ion-content ng-show="showSearch" ng-controller="featureCtrl" style="margin-top: 55px">
+
+    <div class="products-row" style="padding-bottom: 50px">
+    <div ng-if="isEmpty" class="padding"><p style="color: #C7C7C7; text-align: center">No items found.</p></div>
+    <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
+    
+      <div ng-repeat="submenu in subs = (searchMenuData | searchField : 'product.itemName' | filter:search.query)">
+      <h1 class="myMenuSubTitle">{{submenu.subName}}</h1>
+
+      <div class="food-product-container" ng-repeat="product in results = (submenu.items | searchField : 'product.itemName' | filter:search.query)">
+        <div class="row info-row">
+          <div class="col logo-col" ng-if="product.isVeg">
+            <span class="icon ion-android-radio-button-on veg"></span>
+          </div>
+          <div class="col logo-col" ng-if="!product.isVeg">
+            <span class="icon ion-android-radio-button-on nveg"></span>
+          </div>
+          <div class="col description-col">
+            <div class="row">
+              <div class="col data-col" style="padding: 3px">
+                <h5 class="product-title">
+                  <a class="product-anchor">{{product.itemName}}</a>
+                </h5>
+                <p class="address-and-price-container">
+                  <span class="myPrice"><i class="fa fa-inr"></i> {{product.itemPrice}}</span>
+                </p>
+              </div>
+              <div class="col col-10 col-center">
+                <button ng-if="!product.isAvailable" class="button button-small button-outline button-info" ng-click="showNotAvailable(product)"><span class="icon ion-alert"></span></button>
+                <button ng-if="product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="customOptions(product)"><span class="icon ion-plus"></span></button>
+                <button ng-if="!product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="addToCart(product)"><span class="icon ion-plus"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+  </ion-content>
+
+
+
 
 <tag ng-if="isOutletClosedNow || isDeliveryDelayedNow">
   <tag ng-if="isOutletClosedNow && !outletClosureWarning">

@@ -199,7 +199,7 @@ angular.module('account.controllers', [])
   $scope.setType = function (value) {
     $scope.queryType = value;
     if(value == 'REFUND'){
-      $scope.myquery.comment = 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razoray Payment ID for your reference.';
+      $scope.myquery.comment = 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.';
     }
     else{
       $scope.myquery.comment = '';
@@ -222,7 +222,7 @@ angular.module('account.controllers', [])
 		else if(($scope.myquery.comment).length > 500){
 			$scope.submitError = "Comments can not contain more than 500 characters";
 		}
-		else if($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razoray Payment ID for your reference.' && $scope.queryType == 'REFUND'){
+		else if($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.' && $scope.queryType == 'REFUND'){
 			$scope.submitError = "Please edit the date and time of placing the order, order amount etc. in comments";
 		}
 		else if($scope.queryType == 'REFUND' && ($scope.myquery.reference).length < 1){
@@ -233,6 +233,8 @@ angular.module('account.controllers', [])
 
       $scope.myquery.type = $scope.queryType;
       $scope.myquery.token = JSON.parse(window.localStorage.user).token;
+
+      $scope.myquery.source = 'IOS';
 
       //LOADING
       $ionicLoading.show({
