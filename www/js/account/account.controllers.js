@@ -5,21 +5,22 @@ angular.module('account.controllers', [])
 
 
   //Network Status
-	if(ConnectivityMonitor.isOffline()){
-		$scope.isOfflineFlag = true;
-    $scope.customer = JSON.parse(window.localStorage.user); //display offline content
-	}
-	else{
-		$scope.isOfflineFlag = false;
-    $scope.customer = user; //Fetch user info if online
-	}
-
+  if(ConnectivityMonitor.isOffline()){
+    $scope.isOfflineFlag = true;
+  }
+  else{
+    $scope.isOfflineFlag = false;
+  }
 
 
   //if not logged in
   if(_.isUndefined(window.localStorage.user) && window.localStorage.user !=""){
     $state.go('intro.auth-login');
   }
+
+  $scope.customer = JSON.parse(window.localStorage.user);
+  $scope.isProfileLoaded = true;
+
 
   //Settings
   $scope.show_new_address_button = false;   //Don't give a provision to add new address here.
@@ -40,8 +41,6 @@ angular.module('account.controllers', [])
       }
       i++;
     }
-
-
 
 
   //Edit Profile
@@ -86,34 +85,34 @@ angular.module('account.controllers', [])
   });
 
   $scope.openAddressesPopover = function($event){
-		$scope.addresses_popover.show($event);
-	};
+    $scope.addresses_popover.show($event);
+  };
   $scope.selectShippingAddress = function(address){
-		$scope.addresses_popover.hide();
-	};
+    $scope.addresses_popover.hide();
+  };
 
 
-	$scope.logout = function() {
-		$ionicActionSheet.show({
-			buttons: [
+  $scope.logout = function() {
+    $ionicActionSheet.show({
+      buttons: [
         { text: '<i class="icon ion-log-out assertive"></i> <i class="assertive">Logout</i>' },
         { text: '<i class="icon"></i> <i class="dark">Cancel</i>' },
       ],
-			titleText: 'Are you sure you want to logout?',
-			buttonClicked: function(index) {
-				if(index == 0){
-					window.localStorage.clear();
+      titleText: 'Are you sure you want to logout?',
+      buttonClicked: function(index) {
+        if(index == 0){
+          window.localStorage.clear();
           menuService.resetAll();
-					$state.go('intro.auth-login');
-				}
+          $state.go('intro.auth-login');
+        }
         return true;
       },
-		});
-	};
+    });
+  };
 
 
   $scope.showEditAddressPopup = function(address) {
-		$scope.address = address;
+    $scope.address = address;
 
     var editAddressPopup = $ionicPopup.show({
       cssClass: 'popup-outer edit-shipping-address-view',
@@ -124,7 +123,7 @@ angular.module('account.controllers', [])
         { text: 'Cancel' },
         {
           text: 'Delete',
-					type: 'delete-button',
+          type: 'delete-button',
           onTap: function(e) {
             var response = ProfileService.deleteSavedAddress(address.id);
             if(response){
@@ -210,31 +209,31 @@ angular.module('account.controllers', [])
   $scope.submitQuery = function(){
     $scope.submitError = '';
     //Validations
-		if(!(/^[a-zA-Z\s]*$/.test($scope.myquery.name))){
-			$scope.submitError = "Names can contain only letters";
-		}
-		else if(!(/^\d{10}$/).test($scope.myquery.mobile)){
-			$scope.submitError = "Mobile Number has to be 10 digit number";
-		}
-		else if(($scope.myquery.comment).length < 10){
-			$scope.submitError = "Please elaborate your query";
-		}
-		else if(($scope.myquery.comment).length > 500){
-			$scope.submitError = "Comments can not contain more than 500 characters";
-		}
-		else if($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.' && $scope.queryType == 'REFUND'){
-			$scope.submitError = "Please edit the date and time of placing the order, order amount etc. in comments";
-		}
-		else if($scope.queryType == 'REFUND' && ($scope.myquery.reference).length < 1){
-			$scope.submitError = "Add 'Payment Reference ID' from Razorpay";
-		}
-		else{
+    if(!(/^[a-zA-Z\s]*$/.test($scope.myquery.name))){
+      $scope.submitError = "Names can contain only letters";
+    }
+    else if(!(/^\d{10}$/).test($scope.myquery.mobile)){
+      $scope.submitError = "Mobile Number has to be 10 digit number";
+    }
+    else if(($scope.myquery.comment).length < 10){
+      $scope.submitError = "Please elaborate your query";
+    }
+    else if(($scope.myquery.comment).length > 500){
+      $scope.submitError = "Comments can not contain more than 500 characters";
+    }
+    else if($scope.myquery.comment == 'The order I tried to place on DD-MM-YYYY, at around HH:MM AM/PM was failed. An amount of Rs. XXX was deducted from my account, but the order was not placed. Please initiate refund for the debited amount. I have mentioned the Razorpay Payment ID for your reference.' && $scope.queryType == 'REFUND'){
+      $scope.submitError = "Please edit the date and time of placing the order, order amount etc. in comments";
+    }
+    else if($scope.queryType == 'REFUND' && ($scope.myquery.reference).length < 1){
+      $scope.submitError = "Add 'Payment Reference ID' from Razorpay";
+    }
+    else{
       $scope.submitError = '';
 
       $scope.myquery.type = $scope.queryType;
       $scope.myquery.token = JSON.parse(window.localStorage.user).token;
 
-      $scope.myquery.source = 'IOS';
+      $scope.myquery.source = 'MOB';
 
       //LOADING
       $ionicLoading.show({
@@ -285,18 +284,23 @@ angular.module('account.controllers', [])
 
 
     //Network Status
-  	if(ConnectivityMonitor.isOffline()){
-  		$scope.isOfflineFlag = true;
-  	}
-  	else{
-  		$scope.isOfflineFlag = false;
-  	}
+    if(ConnectivityMonitor.isOffline()){
+      $scope.isOfflineFlag = true;
+    }
+    else{
+      $scope.isOfflineFlag = false;
+    }
 
 
   $scope.trackMe = function(id){
     trackOrderService.setOrderID(id);
     $state.go('main.app.checkout.track');
   }
+
+
+  //FIRST LOAD
+  $scope.renderFailed = false;
+  $scope.isRenderLoaded = false;
 
 
   var data = {};
@@ -322,13 +326,19 @@ angular.module('account.controllers', [])
       $scope.isEmpty = false;
 
     $scope.left = 1;
+
+    $scope.renderFailed = false;
+    $scope.isRenderLoaded = true;
+
   })
   .error(function(data){
-      $ionicLoading.hide();
+    
       $ionicLoading.show({
         template:  "Not responding. Check your connection.",
         duration: 3000
       });
+
+      $scope.renderFailed = true;
   });
 
 
@@ -366,6 +376,54 @@ angular.module('account.controllers', [])
     });
 
   };
+
+
+        //REFRESHER
+        $scope.doRefresh = function() {
+
+            var data = {};
+            data.token = JSON.parse(window.localStorage.user).token;
+            data.id = 0;
+
+            $http({
+              method  : 'POST',
+              url     : 'https://www.zaitoon.online/services/orderhistory.php',
+              data    : data,
+              headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+              timeout : 10000
+             })
+            .success(function(data) {
+
+              $ionicLoading.hide();
+
+              $scope.orders = data.response;
+              $scope.isFail= !data.status;
+              $scope.failMsg= data.error;
+
+              if($scope.orders.length == 0)
+                $scope.isEmpty = true;
+              else
+                $scope.isEmpty = false;
+
+              $scope.left = 1;
+
+              $scope.renderFailed = false;
+              $scope.isRenderLoaded = true;
+
+              $scope.limiter = 5;
+              $scope.$broadcast('scroll.refreshComplete');
+
+            })
+            .error(function(data){
+                $ionicLoading.hide();
+                $ionicLoading.show({
+                  template:  "Not responding. Check your connection.",
+                  duration: 3000
+                });
+
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
 
 
 

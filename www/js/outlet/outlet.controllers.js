@@ -1,6 +1,7 @@
 angular.module('outlet.controllers', [])
 
 
+
 .controller('BranchCtrl', function($ionicLoading, ConnectivityMonitor, $rootScope, $scope, $http, $ionicPopup, $state) {
 
 
@@ -31,20 +32,63 @@ angular.module('outlet.controllers', [])
             var saved_coords = ex_coords.split('_');
 
 			//Get all the outlets
-			$http.get('https://www.zaitoon.online/services/fetchbranches.php?lat='+saved_coords[0]+'&lng='+saved_coords[1])
-			.then(function(response){
-						$scope.branches = response.data.response;
 
-						console.log($scope.branches)
-			});
+	                //FIRST LOAD
+	                $scope.renderFailed = false;
+	                $scope.isRenderLoaded = false;
+
+                    $http({
+                        method: 'GET',
+                        url: 'https://www.zaitoon.online/services/fetchbranches.php?lat='+saved_coords[0]+'&lng='+saved_coords[1],
+                        timeout: 10000
+                    })
+                    .success(function(data) {
+
+                        $scope.branches = data.response;
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
+                    })
+                    .error(function(data) {
+
+                        $ionicLoading.show({
+                            template: "Not responding. Check your connection.",
+                            duration: 3000
+                        });
+
+                        $scope.renderFailed = true;
+                    });
 		}
 		else{
 
 			//Get all the outlets
-			$http.get('https://www.zaitoon.online/services/fetchbranches.php')
-			.then(function(response){
-						$scope.branches = response.data.response;
-			});			
+
+	                //FIRST LOAD
+	                $scope.renderFailed = false;
+	                $scope.isRenderLoaded = false;
+
+                    $http({
+                        method: 'GET',
+                        url: 'https://www.zaitoon.online/services/fetchbranches.php',
+                        timeout: 10000
+                    })
+                    .success(function(data) {
+
+                        $scope.branches = data.response;
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
+                    })
+                    .error(function(data) {
+
+                        $ionicLoading.show({
+                            template: "Not responding. Check your connection.",
+                            duration: 3000
+                        });
+
+                        $scope.renderFailed = true;
+                    });
+		
 		}
 
 })

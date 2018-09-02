@@ -11,6 +11,8 @@ angular.module('menu.services', [])
   var isIndianLoaded = false;
   var isDessertLoaded = false;
 
+  var isSearchLoadedOnce = false;
+
   this.setDisplayMenuType = function(menutype){
     displayMenuType = menutype;
   }
@@ -35,6 +37,9 @@ angular.module('menu.services', [])
     else if(type == 'DESSERT'){
       isDessertLoaded = flag;
     }
+    else if(type == 'SEARCH'){
+      isSearchLoadedOnce = flag;
+    }
   }
 
   this.getDisplayMenuType = function(){
@@ -53,6 +58,9 @@ angular.module('menu.services', [])
     }
     else if(menutype == 'DESSERT'){
       return isDessertLoaded;
+    }
+    else if(menutype == 'SEARCH'){
+      return isSearchLoadedOnce;
     }
   }
 

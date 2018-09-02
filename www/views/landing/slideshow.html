@@ -7,7 +7,7 @@
   <ion-content class="learn-content" has-bouncing="false">
     <div class="row slides-row">
       <div class="col">
-        <ion-slide-box class="learn-slider" ng-class="{'hide-pager':show_call_to_action_button}" show-pager="true" delegate-handle="getting-started-slides" pager-click="pagerClicked(index)" on-slide-changed="slideChanged($index)">
+        <ion-slide-box class="learn-slider" ng-class="{'hide-pager':show_call_to_action_button}" show-pager="true" delegate-handle="getting-started-slides" pager-click="pagerClicked(index)" on-slide-changed="slideChanged($index)" auto-play="true">
           <ion-slide>
             <section class="slide-learn learn-sub-view" ng-include="'views/landing/slide-1.html'"></section>
           </ion-slide>
