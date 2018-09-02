@@ -1,13 +1,37 @@
 <ion-view class="account-profile-view account-sub-view" cache-view="false">
   <ion-content>
 
+
+  <div ng-show="!isProfileLoaded">
+
+     <div class="row user-info-row" style="padding: 15px 20px 10px 20px; text-align: center; background: #f6f7f8; margin-bottom: 15px;">
+        <div class="col col-100 col-center user-info-col">
+          <h3 class="user-welcome" style="font-weight: 400; font-size: 24px; color: #a2a2a2">{{customer.name}}</h3>
+          <p class="user-email" style="font-weight: 300; color: #a2a2a2; font-style: italic">Loading Profile...</p>
+        </div>
+     </div>
+
+    <div class="user-data-row">
+      <div class="row" style="box-shadow: none; padding: 0; margin-bottom: 10px;"> <div class="infoTile" style="width: 100%; box-shadow: none; padding: 0;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+      <div class="row" style="box-shadow: none; padding: 0; margin-bottom: 10px;"> <div class="infoTile" style="width: 100%; box-shadow: none; padding: 0;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+      <div class="row" style="box-shadow: none; padding: 0; margin-bottom: 10px;"> <div class="infoTile" style="width: 100%; box-shadow: none; padding: 0;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+   </div>
+
+  </div>
+
+
+
+
+  <div ng-show="isProfileLoaded">
+
    <div class="row user-info-row" style="padding: 15px 20px 10px 20px; text-align: center; border-left: 15px solid #a8302b; border-right: 15px solid #a8302b; background: #fdfbee; margin-bottom: 15px;">
       <div class="col col-100 col-center user-info-col">
         <h3 ng-if="!isEditMode" class="user-welcome" style="font-weight: 400; font-size: 24px; color: #a71d2b">{{customer.name}}</h3>
         <h3 ng-if="isEditMode" class="user-welcome" style="font-weight: 300; font-size: 24px; color: #a71d2b">{{temp_name}}</h3>
         <p class="user-email" style="font-weight: 300; color: #5c412c">Member since {{customer.memberSince}}</p>
       </div>
-
    </div>
 
     <div class="user-data-row">
@@ -39,9 +63,6 @@
         <span ng-if="!isEditMode" ng-click="editProfile()" style="color: #A2A1A1; padding: 0px; margin: 0px; font-size: 11px" class="icon ion-edit"> EDIT PROFILE</span>
       </div>
 
-
-
-
     </div>
     <!-- <h3 class="account-sub-title" ng-if="addressCount" style="color: #34495e; text-align: left; padding-left: 20px;">Manage Saved Addresses</h3> -->
     <div ng-if="addressCount" class="address-chooser" ng-click="openAddressesPopover($event)">
@@ -58,5 +79,8 @@
         <a class="button button-block button-clear logout-button" ng-click="showHelp()">Help</a>
       </div>
     </div>
+
+  </div>
+
   </ion-content>
 </ion-view>

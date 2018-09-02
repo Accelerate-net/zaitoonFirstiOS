@@ -1,5 +1,19 @@
 angular.module('common.directives', [])
 
+
+.directive('onErrorSrc', function() {
+  return {
+    link: function(scope, element, attrs) {
+      element.bind('error', function() {
+        if (attrs.src != attrs.onErrorSrc) {
+          attrs.$set('src', attrs.onErrorSrc);
+        }
+      });
+    }
+  }
+})
+
+
 .directive('multiBg', function(_){
 	return {
 		scope: {

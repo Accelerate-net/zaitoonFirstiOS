@@ -1,6 +1,6 @@
 <ion-view class="feed-food-view feed-sub-view search-view" cache-view="false">
 
-  <div class="search-header" ng-if="showSearch">
+  <div class="search-header" style="z-index: 100 !important; position: relative;" ng-if="showSearch">
     <div class="row item-input-inset search-row">
       <div class="col col-90">
         <label class="item-input-wrapper search-label">
@@ -53,10 +53,10 @@
 
 
 
-  <ion-content ng-show="!showSearch" ng-controller="featureCtrl" on-swipe-left="goLeft()" on-swipe-right="goRight()" ng-class="{marginTop50: isFilter}">
+  <ion-content ng-show="!showSearch" ng-controller="featureCtrl" on-swipe-left="goLeft()" on-swipe-right="goRight()">
 
-    <h1 ng-if="items.length > 0 && !isFilter" class="myMenuSubTitle" style="padding: 0px 10px 10px 10px; margin: 0; margin-top: 10px; color: #f39c12">Featured Dishes</h1>
-    <hscroller ng-if="!isFilter" style="margin-bottom: 15px">
+    <h1 ng-if="items.length > 0 && (isRenderLoaded && !renderFailed)" class="myMenuSubTitle" style="padding: 0px 10px 10px 10px; margin: 0; margin-top: 10px; color: #f39c12">Featured Dishes</h1>
+    <hscroller ng-if="!isFilter && (isRenderLoaded && !renderFailed)" style="margin-bottom: 15px">
       <ion-scroll direction="x">
         <hcard ng-repeat="item in items" index="{{$index}}" available="{{item.isAvailable}}" name="{{item.itemName}}" price="{{item.itemPrice}}" image="{{item.photo}}" ng-click="addFeature(item)"></hcard>
       </ion-scroll>
@@ -65,7 +65,45 @@
     <div class="products-row" style="padding-bottom: 50px">
     <div ng-if="isEmpty" class="padding"><p style="color: #C7C7C7; text-align: center">No items found.</p></div>
     <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
-    <div ng-repeat="maintype in menu track by $index">
+
+
+
+      <!-- Loader Dummy Tiles -->
+      <div ng-if="!isRenderLoaded && !renderFailed"> 
+          <div class="row" style="padding: 10px 0 0 0; margin-top: 10px"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 50%; height: 24px; display: inline-block;"> <div class="loaderDummyTile" style="height: 24px"></div> </div> </div> </div>
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 30%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 100px; display: inline-block;"> <div class="loaderDummyTile" style="height: 100px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> <!-- Divide --> <div class="infoTile" style="width: 30%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 100px; display: inline-block;"> <div class="loaderDummyTile" style="height: 100px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> <!-- Divide --> <div class="infoTile" style="width: 30%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 100px; display: inline-block;"> <div class="loaderDummyTile" style="height: 100px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0; margin-top: 20px;"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 50%; height: 24px; display: inline-block;"> <div class="loaderDummyTile" style="height: 24px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%; padding: 0 10px"> <div class="infoTileHead" style="width: 100%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 30%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+      </div>
+
+      <div ng-if="renderFailed" style="padding: 40px 20px 20px 20px;">
+        <center>
+          <img src="img/common/error_icon.png">
+          <p style="color: #d4d4d4; margin: 10px; font-size: 15px;">Failed to load the menu. Try again.</p>
+        </center>
+      </div>
+
+
+
+
+    <div ng-repeat="maintype in menu track by $index" ng-if="isRenderLoaded && !renderFailed">
       <div ng-repeat="submenu in subs = (maintype.subCategories | searchField : 'product.itemName' | filter:search.query)">
       <h1 class="myMenuSubTitle">{{submenu.subName}}</h1>
 
@@ -90,7 +128,7 @@
               <div class="col col-10 col-center">
                 <button ng-if="!product.isAvailable" class="button button-small button-outline button-info" ng-click="showNotAvailable(product)"><span class="icon ion-alert"></span></button>
                 <button ng-if="product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="customOptions(product)"><span class="icon ion-plus"></span></button>
-                <button ng-if="!product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="addToCart(product)"><span class="icon ion-plus"></span></button>
+                <button ng-if="!product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-attr-id="{{'dish_'+product.itemCode}}" ng-click="addToCart(product)"><span class="icon ion-plus"></span></button>
               </div>
             </div>
           </div>
@@ -109,10 +147,10 @@
 
 
   <!-- If searching - Search whole Menu -->
-  <ion-content ng-show="showSearch" ng-controller="featureCtrl" style="margin-top: 55px">
+  <ion-content ng-show="showSearch" style="margin-top: 40px">
 
     <div class="products-row" style="padding-bottom: 50px">
-    <div ng-if="isEmpty" class="padding"><p style="color: #C7C7C7; text-align: center">No items found.</p></div>
+
     <div ng-if="isOfflineFlag" class="padding"><p style="color: #6F6F6F; text-align: center; font-size: 18px;"><i style="color: #FFC300; font-size: 130%" class="icon ion-alert-circled"></i> Not connected to internet.</p></div>
     
       <div ng-repeat="submenu in subs = (searchMenuData | searchField : 'product.itemName' | filter:search.query)">
@@ -139,7 +177,7 @@
               <div class="col col-10 col-center">
                 <button ng-if="!product.isAvailable" class="button button-small button-outline button-info" ng-click="showNotAvailable(product)"><span class="icon ion-alert"></span></button>
                 <button ng-if="product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="customOptions(product)"><span class="icon ion-plus"></span></button>
-                <button ng-if="!product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-click="addToCart(product)"><span class="icon ion-plus"></span></button>
+                <button ng-if="!product.isCustom && product.isAvailable" class="button button-small button-outline button-balanced" ng-attr-id="{{'search_dish_'+product.itemCode}}" ng-click="addToCart(product, 'SEARCH')"><span class="icon ion-plus"></span></button>
               </div>
             </div>
           </div>
@@ -178,7 +216,6 @@
   <tag class="filterIcon" ng-if="!isFilter" ui-sref="main.app.filters()"><img src="img/feed/filter.png" style="margin: 8px" width="25px"></tag>
 </tag>
   <!-- <ion-content>
-
 
 
 

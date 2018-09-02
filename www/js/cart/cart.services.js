@@ -63,9 +63,18 @@ angular.module('cart.services', [])
       }
     }
 
+    animateCartIcon();
+
     window.localStorage.zaitoonFirst_cart = JSON.stringify(cart_products);
     $rootScope.$broadcast('cart_updated', cart_products);
   };
+
+  function animateCartIcon(){
+    var x = document.getElementById("cart-image-icon");
+    x.classList.remove("pulseCart");
+    setTimeout(function(){ x.classList.add("pulseCart"); }, 100);
+    setTimeout(function(){ x.classList.remove("pulseCart"); }, 1000);
+  }
 
   this.lessProduct = function(productToAdd){
 

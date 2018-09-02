@@ -20,13 +20,30 @@
 
 
 
+      <!-- Loader Dummy Tiles -->
+      <div ng-if="!isRenderLoaded && !renderFailed" style="padding: 10px"> 
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+          <div class="row" style="padding: 10px 0 0 0"> <div class="infoTile" style="width: 100%;"> <div class="infoTileHead" style="width: 40%; height: 18px; display: inline-block;"> <div class="loaderDummyTile" style="height: 16px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> <div class="infoTileHead" style="width: 100%; height: 13px; display: inline-block;"> <div class="loaderDummyTile" style="height: 13px"></div> </div> </div> </div>
+
+      </div>
+
+      <div ng-if="renderFailed" style="padding: 40px 20px 20px 20px;">
+        <center>
+          <img src="img/common/error_icon.png">
+          <p style="color: #d4d4d4; margin: 10px; font-size: 15px;">Failed to load the Outlets. Try again.</p>
+        </center>
+      </div>
 
 
       <div class="card deals-product-container" ng-repeat="branch in branches"> <!--  -->
-
-
         <div class="row middle-row-special">
-
           <div class="col col-100" style="position: relative; text-align: center; color: white;" ui-sref="main.app.outlets({outletCode: branch.outlet})">    
             <pre-img ratio="_5_3" ><img src="{{branch.pictures[0]}}" class="myDealsImg multi-bg " spinner-on-load></pre-img>
             <div class="branchListStatusGreen" ng-if="branch.isOpen">Open Now</div>

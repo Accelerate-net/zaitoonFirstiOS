@@ -15,23 +15,23 @@
     <ul class="list checkout-products">
       <li class="item checkout-product" ng-repeat="product in products track by $index" ng-style="getItemStyle(product)">
         
-		    <div class="row" style="margin-bottom: 10px" ng-if="product.isImageAvailable == 1">			
+        <div class="row" style="margin-bottom: 10px" ng-if="product.isImageAvailable == 1">     
               <div class="col col-center">
-			  <div class="rubber_stamp" ng-if="product.status != 0">Redeemed</div>
-			  <pre-img ratio="_5_3">
-                 <img ng-src="{{product.url}}" class="myDealsImg" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" spinner-on-load>
-				 <!--<img class="product-image" ng-src="{{ product.image }}" > -->
+        <div class="rubber_stamp" ng-if="product.status != 0">Redeemed</div>
+        <pre-img ratio="_5_3">
+                 <img ng-src="{{product.url}}" on-error-src="./img/common/image_error.jpg" class="myDealsImg" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" spinner-on-load>
+         <!--<img class="product-image" ng-src="{{ product.image }}" > -->
               </pre-img>
-			  			  
-			  </div>
-            </div>		
+                
+        </div>
+            </div>    
 
-		
-		<div class="row">
-	
-          <div class="col col-75 col-center">			
-            <div class="row">	
-			              <div class="col col-10 col-center">
+    
+    <div class="row">
+  
+          <div class="col col-75 col-center">     
+            <div class="row"> 
+                    <div class="col col-10 col-center">
               </div>
               <div class="col col-center">
 
@@ -68,7 +68,7 @@
 
       </div>
     </div>
-	
+  
   </ion-content>
 
 

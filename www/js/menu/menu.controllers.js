@@ -1,7 +1,7 @@
 angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
-    .controller('FeedCtrl', function($ionicLoading, outletService, locationChangeRouteTrackerService, $ionicModal, $scope, $http, $ionicPopup, $rootScope, $state, $ionicScrollDelegate, $ionicSideMenuDelegate, ShoppingCartService) {
+    .controller('FeedCtrl', function(outletService, menuService, locationChangeRouteTrackerService, $ionicLoading, $ionicModal, $scope, $http, $ionicPopup, $rootScope, $state, $ionicScrollDelegate, $ionicSideMenuDelegate, ShoppingCartService) {
     
 
         $scope.getProductsInCart = function() {
@@ -25,6 +25,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         $scope.selectedOutlet = outletService.getInfo();
 
+
         $scope.navToggled = false;
 
         $scope.showOptionsMenu = function() {
@@ -41,7 +42,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         }
 
 
-
         $scope.outletSelection = outletService.getInfo();
         if ($scope.outletSelection.outlet == "") {
             $myOutlet = "VELACHERY";
@@ -49,49 +49,63 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             $myOutlet = $scope.outletSelection.outlet;
         }
 
-
-
         $scope.callSearch = function() {
 
-                $ionicLoading.show();
+                //Check if already cached
+                var isCached = menuService.getIsLoadedFlag('SEARCH');
+                if(isCached){
+                            
+                            $scope.searchMenuData = JSON.parse(window.localStorage.menuSearchCache);
+                    
+                            if ($scope.searchMenuData.length == 0) {
+                                $scope.isEmpty = true;
+                            } else {
+                                $scope.isEmpty = false;
+                            }
 
-                //Fetch Data for Search
-                $http({
-                        method: 'GET',
-                        url: 'https://www.zaitoon.online/services/fetchmenuallmob.php?outlet='+$myOutlet,
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        timeout: 10000
-                    })
-                    .success(function(response) {
+                            $rootScope.$broadcast('search_called', true);
+                            $rootScope.$emit('search_called', true);
+                }
+                else{
 
-                        $ionicLoading.hide();
+                    $ionicLoading.show();
 
-                        $scope.searchMenuData = response;
-                        if ($scope.searchMenuData.length == 0) {
-                            $scope.isEmpty = true;
-                        } else {
-                            $scope.isEmpty = false;
-                        }
+                    //Fetch Data for Search
+                    $http({
+                            method: 'GET',
+                            url: 'https://www.zaitoon.online/services/fetchmenuallmob.php?outlet='+$myOutlet,
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            timeout: 10000
+                        })
+                        .success(function(response) {
 
-                        $rootScope.$broadcast('search_called', true);
-                        $rootScope.$emit('search_called', true);
+                            $ionicLoading.hide();
 
-                    })
-                    .error(function(data) {
-                        $ionicLoading.hide();
-                        $ionicLoading.show({
-                            template: "Not responding. Check your connection.",
-                            duration: 3000
+                            $scope.searchMenuData = response;
+                            if ($scope.searchMenuData.length == 0) {
+                                $scope.isEmpty = true;
+                            } else {
+                                $scope.isEmpty = false;
+                            }
+
+                            $rootScope.$broadcast('search_called', true);
+                            $rootScope.$emit('search_called', true);
+
+                            window.localStorage.menuSearchCache = JSON.stringify($scope.searchMenuData);
+                            menuService.setLoadFlag('SEARCH', true);
+
+                        })
+                        .error(function(data) {
+                            $ionicLoading.hide();
+                            $ionicLoading.show({
+                                template: "Not responding. Check your connection.",
+                                duration: 3000
+                            });                            
                         });
-
-                        $rootScope.$broadcast('search_called', true);
-                        $rootScope.$emit('search_called', true);
-                        
-                    });
+                }
         }
-
 
         //Book a Table
         $scope.showOutlets = function() {
@@ -103,9 +117,32 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                 });
             } else {
                 //Get all the outlets
-                $http.get('https://www.zaitoon.online/services/fetchoutlets.php')
-                    .then(function(response) {
-                        $scope.allList = response.data.response;
+                
+                //FIRST LOAD
+                $scope.renderFailed = false;
+                $scope.isRenderLoaded = false;
+
+
+                    $http({
+                        method: 'GET',
+                        url: 'https://www.zaitoon.online/services/fetchoutlets.php',
+                        timeout: 10000
+                    })
+                    .success(function(data) {
+
+                        $scope.allList = data.response;
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
+                    })
+                    .error(function(data) {
+
+                        $ionicLoading.show({
+                            template: "Not responding. Check your connection.",
+                            duration: 3000
+                        });
+
+                        $scope.renderFailed = true;
                     });
 
                 outletsPopup = $ionicPopup.show({
@@ -117,6 +154,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         text: 'Cancel'
                     }]
                 });
+
 
                 //Goto Outlet's page
                 $scope.gotoOutlet = function() {
@@ -185,8 +223,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
                 $scope.myquery.type = $scope.queryType;
                 $scope.myquery.token = JSON.parse(window.localStorage.user).token;
-
-                $scope.myquery.source = 'IOS';
+                $scope.myquery.source = 'MOB';
 
                 //LOADING
                 $ionicLoading.show({
@@ -238,15 +275,12 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
     .controller('featureCtrl', function($scope, outletService, $http, $ionicLoading, ShoppingCartService, $ionicPopup, menuService) {
 
 
-
         $scope.outletSelection = outletService.getInfo();
         if ($scope.outletSelection.outlet == "") {
             $myOutlet = "VELACHERY";
         } else {
             $myOutlet = $scope.outletSelection.outlet;
         }
-
-
 
         $scope.addFeature = function(item) {
 
@@ -287,10 +321,11 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                             item.variant = $scope.choiceName;
 
                             //adding to cart
-                            $ionicLoading.show({
-                                template: '<tag style="color: #f1c40f">' + item.itemName + '</tag> is added.',
-                                duration: 1000
-                            });
+                            // $ionicLoading.show({
+                            //     template: '<tag style="color: #f1c40f">' + item.itemName + '</tag> is added.',
+                            //     duration: 1000
+                            // });
+
                             item.qty = 1;
                             ShoppingCartService.addProduct(item);
 
@@ -307,10 +342,10 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
                     confirmPopup.then(function(res) {
                         if (res) {
-                            $ionicLoading.show({
-                                template: '<tag style="color: #f1c40f">' + item.itemName + '</tag> is added.',
-                                duration: 1000
-                            });
+                            // $ionicLoading.show({
+                            //     template: '<tag style="color: #f1c40f">' + item.itemName + '</tag> is added.',
+                            //     duration: 1000
+                            // });
 
                             item.qty = 1;
                             ShoppingCartService.addProduct(item);
@@ -323,30 +358,33 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         var temp_cusine = menuService.getDisplayMenuType();
 
-        var data = {};
-        data.cuisine = temp_cusine;
-        data.outlet = $myOutlet;
-        $http({
-                method: 'POST',
-                url: 'https://www.zaitoon.online/services/featuremenu.php',
-                data: data,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                timeout: 10000
-            })
-            .success(function(response) {
-                $ionicLoading.hide();
-                $scope.items = response;
-            })
-            .error(function(data) {
-                $ionicLoading.hide();
-                $ionicLoading.show({
-                    template: "Not responding. Check your connection.",
-                    duration: 3000
-                });
-            });
+        function renderFeatureMenu(){
 
+            var data = {};
+            data.cuisine = temp_cusine;
+            data.outlet = $myOutlet;
+            
+            $http({
+                    method: 'POST',
+                    url: 'https://www.zaitoon.online/services/featuremenu.php',
+                    data: data,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    timeout: 10000
+                })
+                .success(function(response) {
+                    $scope.items = response;
+                })
+                .error(function(data) {
+                    $ionicLoading.show({
+                        template: "Not responding. Check your connection.",
+                        duration: 3000
+                    });
+                });
+        }
+
+        renderFeatureMenu();
     })
 
 
@@ -372,47 +410,44 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         }
 
 
-
-
-        //LOADING
-        $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner>'
-        });
-
         //Check if already cached
         var isCached = menuService.getIsLoadedFlag('ARABIAN');
 
+        if(isCached){
+            $scope.renderFailed = false;
+            $scope.isRenderLoaded = true;
+        }
 
         /* DO NOT REMOVE OR DELETE THIS PART
-        	//Check if location code is set in localStorage and update it
-        	if(!_.isUndefined(window.localStorage.locationCode)){
-        		$http.get('https://www.zaitoon.online/services/fetchoutlets.php?locationCode='+window.localStorage.locationCode)
-        		.then(function(response){
+            //Check if location code is set in localStorage and update it
+            if(!_.isUndefined(window.localStorage.locationCode)){
+                $http.get('https://www.zaitoon.online/services/fetchoutlets.php?locationCode='+window.localStorage.locationCode)
+                .then(function(response){
 
-        			//Set outlet and location
-        			window.localStorage.outlet = response.data.response.outlet;
-        			window.localStorage.location = response.data.response.location;
-        			window.localStorage.locationCode = response.data.response.locationCode;
+                    //Set outlet and location
+                    window.localStorage.outlet = response.data.response.outlet;
+                    window.localStorage.location = response.data.response.location;
+                    window.localStorage.locationCode = response.data.response.locationCode;
 
-        			var info = {};
-        			info.onlyTakeAway = false;
-        			info.outlet = response.data.response.outlet;
-        			info.isSpecial = response.data.response.isSpecial;
-        			info.city = response.data.response.city;
-        			info.location = response.data.response.location;
-        			info.locationCode = response.data.response.locationCode;
-        			info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
-        			info.paymentKey = response.data.response.razorpayID;
-        			info.isTaxCollected = response.data.response.isTaxCollected;
-        			info.taxPercentage = response.data.response.taxPercentage;
-        			info.isParcelCollected = response.data.response.isParcelCollected;
-        			info.parcelPercentageDelivery = response.data.response.parcelPercentageDelivery;
-        			info.parcelPercentagePickup = response.data.response.parcelPercentagePickup;
-        			info.minAmount = response.data.response.minAmount;
-        			info.minTime = response.data.response.minTime;
-        			outletService.setOutletInfo(info);
-        		});
-        	}
+                    var info = {};
+                    info.onlyTakeAway = false;
+                    info.outlet = response.data.response.outlet;
+                    info.isSpecial = response.data.response.isSpecial;
+                    info.city = response.data.response.city;
+                    info.location = response.data.response.location;
+                    info.locationCode = response.data.response.locationCode;
+                    info.isAcceptingOnlinePayment = response.data.response.isAcceptingOnlinePayment;
+                    info.paymentKey = response.data.response.razorpayID;
+                    info.isTaxCollected = response.data.response.isTaxCollected;
+                    info.taxPercentage = response.data.response.taxPercentage;
+                    info.isParcelCollected = response.data.response.isParcelCollected;
+                    info.parcelPercentageDelivery = response.data.response.parcelPercentageDelivery;
+                    info.parcelPercentagePickup = response.data.response.parcelPercentagePickup;
+                    info.minAmount = response.data.response.minAmount;
+                    info.minTime = response.data.response.minTime;
+                    outletService.setOutletInfo(info);
+                });
+            }
 
         */
 
@@ -546,7 +581,12 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             }
 
             if (data.isFilter || !isCached) {
-                $http({
+
+                  //FIRST LOAD
+                  $scope.renderFailed = false;
+                  $scope.isRenderLoaded = false;
+
+                    $http({
                         method: 'POST',
                         url: 'https://www.zaitoon.online/services/fetchmenu.php',
                         data: data,
@@ -556,7 +596,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         timeout: 10000
                     })
                     .success(function(response) {
-                        $ionicLoading.hide();
 
                         $scope.menu = response;
                         if ($scope.menu.length == 0) {
@@ -564,28 +603,84 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         } else {
                             $scope.isEmpty = false;
                         }
+
                         //Caching Part
                         if (!data.isFilter) {
                             //add to Cache if it's not filter applied Search
                             window.localStorage.arabianCache = JSON.stringify($scope.menu);
                             menuService.setLoadFlag('ARABIAN', true);
+
+                            renderAllOtherMenu();
                         }
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
                     })
                     .error(function(data) {
-                        $ionicLoading.hide();
+
                         $ionicLoading.show({
                             template: "Not responding. Check your connection.",
                             duration: 3000
                         });
+
+                        $scope.renderFailed = true;
                     });
             } else {
                 //Don't call http. Load from cache only.
                 $scope.menu = JSON.parse(window.localStorage.arabianCache);
-                $ionicLoading.hide();
             }
         }
 
-        if (isCached) {
+
+        //Render other Menu once
+        function renderAllOtherMenu(){
+            
+            var data = {};
+            data.outlet = $myOutlet;
+
+                    $http({
+                        method: 'POST',
+                        url: 'https://www.zaitoon.online/services/fetchmenuallcuisines.php',
+                        data: data,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        timeout: 10000
+                    })
+                    .success(function(response) {
+                        $ionicLoading.hide();
+
+                        var allmenu = response;
+
+                        var n = 0;
+                        while(allmenu[n]){
+
+                                if(allmenu[n].mainType == "CHINESE"){
+                                    var temp_menu = [allmenu[n]];
+                                    window.localStorage.chineseCache = JSON.stringify(temp_menu);
+                                    menuService.setLoadFlag('CHINESE', true);
+                                }
+                                else if(allmenu[n].mainType == "INDIAN"){
+                                    var temp_menu_two = [allmenu[n]]
+                                    window.localStorage.indianCache = JSON.stringify(temp_menu_two);
+                                    menuService.setLoadFlag('INDIAN', true);
+                                }
+                                else if(allmenu[n].mainType == "DESSERTS"){
+                                    var temp_menu_three = [allmenu[n]]
+                                    window.localStorage.dessertCache = JSON.stringify(temp_menu_three);
+                                    menuService.setLoadFlag('DESSERT', true);
+                                }
+
+                            n++;
+                        }
+                    })
+                    .error(function(data) {
+                    });            
+        }
+
+
+
+        if(isCached) {
             init();
         } else {
             $timeout(function() {
@@ -643,7 +738,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                     product.itemPrice = $scope.choicePrice;
                     product.variant = $scope.choiceName;
 
-                    $scope.addToCart(product);
+                    $scope.addToCart(product, 'DO_NOT_ANIMATE');
                     newCustomPopup.close();
                 }
 
@@ -653,14 +748,36 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
 
-        $scope.addToCart = function(product) {
-            $ionicLoading.show({
-                template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
-                duration: 1000
-            });
+        $scope.addToCart = function(product, optionalFlag) {
+            // $ionicLoading.show({
+            //     template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
+            //     duration: 1000
+            // });
 
             product.qty = 1;
             ShoppingCartService.addProduct(product);
+        
+            console.log(optionalFlag)
+            //Animate
+            if(optionalFlag && optionalFlag == 'DO_NOT_ANIMATE'){
+
+            }
+            else if(optionalFlag && optionalFlag == 'SEARCH'){
+                var id = "search_dish_"+product.itemCode;
+                console.log(id)
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);   
+            }
+            else{
+                var id = "dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);    
+            }  
+
         };
 
 
@@ -679,13 +796,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         //To keep track which cuisine is rentered
         menuService.setDisplayMenuType("CHINESE");
 
-
-        //LOADING
-        $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner>'
-        });
-
-
         //Swipe left/right
         $scope.goRight = function() {
             $state.go('main.app.feed.arabian');
@@ -696,8 +806,11 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         //Check if already cached
         var isCached = menuService.getIsLoadedFlag('CHINESE');
-
-
+        
+        if(isCached){
+            $scope.renderFailed = false;
+            $scope.isRenderLoaded = true;
+        }
 
         var custom_filter = !_.isUndefined(window.localStorage.customFilter) ? window.localStorage.customFilter : [];
 
@@ -786,7 +899,12 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             }
 
             if (data.isFilter || !isCached) {
-                $http({
+
+                  //FIRST LOAD
+                  $scope.renderFailed = false;
+                  $scope.isRenderLoaded = false;
+
+                    $http({
                         method: 'POST',
                         url: 'https://www.zaitoon.online/services/fetchmenu.php',
                         data: data,
@@ -796,7 +914,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         timeout: 10000
                     })
                     .success(function(response) {
-                        $ionicLoading.hide();
 
                         $scope.menu = response;
                         if ($scope.menu.length == 0) {
@@ -810,18 +927,21 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                             window.localStorage.chineseCache = JSON.stringify($scope.menu);
                             menuService.setLoadFlag('CHINESE', true);
                         }
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
                     })
                     .error(function(data) {
-                        $ionicLoading.hide();
                         $ionicLoading.show({
                             template: "Not responding. Check your connection.",
                             duration: 3000
                         });
+
+                        $scope.renderFailed = true;
                     });
             } else {
                 //Don't call http. Load from cache only.
                 $scope.menu = JSON.parse(window.localStorage.chineseCache);
-                $ionicLoading.hide();
             }
         }
 
@@ -884,7 +1004,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                     product.itemPrice = $scope.choicePrice;
                     product.variant = $scope.choiceName;
 
-                    $scope.addToCart(product);
+                    $scope.addToCart(product, 'DO_NOT_ANIMATE');
                     newCustomPopup.close();
                 }
 
@@ -894,14 +1014,34 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
 
-        $scope.addToCart = function(product) {
-            $ionicLoading.show({
-                template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
-                duration: 1000
-            });
+        $scope.addToCart = function(product, optionalFlag) {
+            // $ionicLoading.show({
+            //     template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
+            //     duration: 1000
+            // });
 
             product.qty = 1;
             ShoppingCartService.addProduct(product);
+
+            //Animate
+            if(optionalFlag && optionalFlag == 'DO_NOT_ANIMATE'){
+
+            }
+            else if(optionalFlag && optionalFlag == 'SEARCH'){
+                var id = "search_dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);   
+            }
+            else{
+                var id = "dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);    
+            }  
+
         };
 
 
@@ -921,11 +1061,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         menuService.setDisplayMenuType("INDIAN");
 
 
-        //LOADING
-        $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner>'
-        });
-
         //Swipe left/right
         $scope.goRight = function() {
             $state.go('main.app.feed.chinese');
@@ -938,6 +1073,11 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         //Check if already cached
         var isCached = menuService.getIsLoadedFlag('INDIAN');
+
+        if(isCached){
+            $scope.renderFailed = false;
+            $scope.isRenderLoaded = true;
+        }
 
 
         var custom_filter = !_.isUndefined(window.localStorage.customFilter) ? window.localStorage.customFilter : [];
@@ -1029,7 +1169,12 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             }
 
             if (data.isFilter || !isCached) {
-                $http({
+
+                  //FIRST LOAD
+                  $scope.renderFailed = false;
+                  $scope.isRenderLoaded = false;
+
+                    $http({
                         method: 'POST',
                         url: 'https://www.zaitoon.online/services/fetchmenu.php',
                         data: data,
@@ -1039,7 +1184,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         timeout: 10000
                     })
                     .success(function(response) {
-                        $ionicLoading.hide();
 
                         $scope.menu = response;
                         if ($scope.menu.length == 0) {
@@ -1053,13 +1197,18 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                             window.localStorage.indianCache = JSON.stringify($scope.menu);
                             menuService.setLoadFlag('INDIAN', true);
                         }
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
                     })
                     .error(function(data) {
-                        $ionicLoading.hide();
+
                         $ionicLoading.show({
                             template: "Not responding. Check your connection.",
                             duration: 3000
                         });
+
+                        $scope.renderFailed = true;
                     });
             } else {
                 //Don't call http. Load from cache only.
@@ -1129,7 +1278,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                     product.itemPrice = $scope.choicePrice;
                     product.variant = $scope.choiceName;
 
-                    $scope.addToCart(product);
+                    $scope.addToCart(product, 'DO_NOT_ANIMATE');
                     newCustomPopup.close();
                 }
 
@@ -1139,14 +1288,34 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
 
-        $scope.addToCart = function(product) {
-            $ionicLoading.show({
-                template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
-                duration: 1000
-            });
+        $scope.addToCart = function(product, optionalFlag) {
+            // $ionicLoading.show({
+            //     template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
+            //     duration: 1000
+            // });
 
             product.qty = 1;
             ShoppingCartService.addProduct(product);
+
+
+            //Animate
+            if(optionalFlag && optionalFlag == 'DO_NOT_ANIMATE'){
+
+            }
+            else if(optionalFlag && optionalFlag == 'SEARCH'){
+                var id = "search_dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);   
+            }
+            else{
+                var id = "dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);    
+            }  
         };
 
 
@@ -1165,12 +1334,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
         //To keep track which cuisine is rentered
         menuService.setDisplayMenuType("DESSERT");
 
-
-        //LOADING
-        $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner>'
-        });
-
         //Swipe left/right
         $scope.goRight = function() {
             $state.go('main.app.feed.indian');
@@ -1180,6 +1343,11 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
         //Check if already cached
         var isCached = menuService.getIsLoadedFlag('DESSERT');
+
+        if(isCached){
+            $scope.renderFailed = false;
+            $scope.isRenderLoaded = true;
+        }
 
 
         var custom_filter = !_.isUndefined(window.localStorage.customFilter) ? window.localStorage.customFilter : [];
@@ -1268,7 +1436,12 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
             }
 
             if (data.isFilter || !isCached) {
-                $http({
+                  
+                  //FIRST LOAD
+                  $scope.renderFailed = false;
+                  $scope.isRenderLoaded = false;
+
+                    $http({
                         method: 'POST',
                         url: 'https://www.zaitoon.online/services/fetchmenu.php',
                         data: data,
@@ -1278,7 +1451,6 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                         timeout: 10000
                     })
                     .success(function(response) {
-                        $ionicLoading.hide();
 
                         $scope.menu = response;
                         if ($scope.menu.length == 0) {
@@ -1292,13 +1464,18 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                             window.localStorage.dessertCache = JSON.stringify($scope.menu);
                             menuService.setLoadFlag('DESSERT', true);
                         }
+
+                        $scope.renderFailed = false;
+                        $scope.isRenderLoaded = true;
                     })
                     .error(function(data) {
-                        $ionicLoading.hide();
+
                         $ionicLoading.show({
                             template: "Not responding. Check your connection.",
                             duration: 3000
                         });
+
+                        $scope.renderFailed = true;
                     });
             } else {
                 //Don't call http. Load from cache only.
@@ -1364,7 +1541,7 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
                     product.itemPrice = $scope.choicePrice;
                     product.variant = $scope.choiceName;
 
-                    $scope.addToCart(product);
+                    $scope.addToCart(product, 'DO_NOT_ANIMATE');
                     newCustomPopup.close();
                 }
 
@@ -1374,17 +1551,35 @@ angular.module('menu.controllers', ['ionic', 'ionic.contrib.ui.hscrollcards'])
 
 
 
-        $scope.addToCart = function(product) {
-            $ionicLoading.show({
-                template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
-                duration: 1000
-            });
+        $scope.addToCart = function(product, optionalFlag) {
+            // $ionicLoading.show({
+            //     template: '<tag style="color: #f1c40f">' + product.itemName + '</tag> is added.',
+            //     duration: 1000
+            // });
 
             product.qty = 1;
             ShoppingCartService.addProduct(product);
+
+            //Animate
+            if(optionalFlag && optionalFlag == 'DO_NOT_ANIMATE'){
+
+            }
+            else if(optionalFlag && optionalFlag == 'SEARCH'){
+                var id = "search_dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);   
+            }
+            else{
+                var id = "dish_"+product.itemCode;
+                document.getElementById(id).innerHTML = '<span class="icon ion-checkmark fadeIn"></span>';
+                setTimeout(function(){                  
+                    document.getElementById(id).innerHTML = '<span class="icon ion-plus fadeIn"></span>';
+                }, 1000);    
+            }          
+
         };
-
-
+        
     })
-
 ;
