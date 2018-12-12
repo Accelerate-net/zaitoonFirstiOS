@@ -87,14 +87,14 @@
  -->
 
 
-        <div class="row middle-row-special" ng-if="combo.isImageAvailable">
+        <div class="row middle-row-special" style="position: relative;" ng-if="combo.isImageAvailable">
           <div class="col col-100">  
               <pre-img ratio="_5_3">
                  <img ng-if="1" src="{{combo.url}}" on-error-src="./img/common/image_error.jpg" class="myDealsImg" spinner-on-load>
               </pre-img>
         
-              <div class="dealsNoAddButton" style="right: 20px" ng-if="!combo.isAvailable">Out of Stock</div>
-              <div class="dealsAddButton" style="right: 20px" ng-if="combo.isAvailable" ng-click="addComboToCart(combo)">Add to Cart</div> 
+              <div class="dealsNoAddButton" ng-if="!combo.isAvailable">Out of Stock</div>
+              <div class="dealsAddButton" ng-if="combo.isAvailable" ng-click="addComboToCart(combo)">Add to Cart</div> 
           </div>
         </div>
 
